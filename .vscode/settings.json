@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Pirate-Game-Jam-25.sln"
+    "dotnet.defaultSolution": "BulletPath.sln"
 }
