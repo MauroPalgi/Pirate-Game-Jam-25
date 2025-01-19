@@ -1,36 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
-public class ObstacleSpawner : Singleton<ObstacleSpawner>
+public class ObstacleSpawner : Spawner
 {
-    [SerializeField]
-    private GameObject obstacle;
 
     [SerializeField]
     private TacticGrid grid;
 
-    [SerializeField]
-    private int amount = 10;
 
-    private void OnDestroy()
-    {
-        GameManager.OnGameStateChanged -= handleOnGameStateChanged;
-    }
-
-    private void Awake()
-    {
-        GameManager.OnGameStateChanged += handleOnGameStateChanged;
-    }
-
-    private void handleOnGameStateChanged(GameState state)
-    {
-        if (state == GameState.SpawningObstacle) // Corrige el estado si es necesario
-        {
-            Debug.Log("Start Menu");
-            SpawnObstacleRandomGridPosition();
-        }
-    }
 
     private void SpawnObstacleRandomGridPosition()
     {
@@ -40,7 +19,7 @@ public class ObstacleSpawner : Singleton<ObstacleSpawner>
             return;
         }
 
-        if (obstacle == null)
+        if (spaw == null)
         {
             Debug.LogError("Obstacle prefab is not assigned in the ObstacleSpawner!");
             return;
@@ -58,7 +37,7 @@ public class ObstacleSpawner : Singleton<ObstacleSpawner>
             usedPositions.Add(randomPosition);
             Debug.Log($"Obstacle {i} Position: {randomPosition}");
 
-            GameObject instance = Instantiate(obstacle, randomPosition, Quaternion.identity);
+            GameObject instance = Instantiate(spaw, randomPosition, Quaternion.identity);
             // Asigna la capa al objeto instanciado
             LayerMask obstacleMask = grid.GetObstacleLayer();
             int layerIndex = LayerMask.NameToLayer("Wall");
@@ -79,5 +58,10 @@ public class ObstacleSpawner : Singleton<ObstacleSpawner>
         {
             SetLayerRecursively(child.gameObject, layer);
         }
+    }
+
+    protected override void StateChangeEventHandler(GameState state)
+    {
+        SpawnObstacleRandomGridPosition();
     }
 }
