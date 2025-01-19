@@ -6,8 +6,11 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField]
     private float _speed;
+
     [SerializeField]
     private float _rotationSpeed;
+    [SerializeField]
+    private float _stopDistance = 0.5f;
 
     private Rigidbody _rigidbody;
     private PlayerDetection _playerDetectionController;
@@ -20,50 +23,37 @@ public class EnemyMovement : MonoBehaviour
         _playerDetectionController = GetComponent<PlayerDetection>();
     }
 
-    void FixedUpdate()
+    // private void Update() {
+    //     float distance = Vector3.Distance(transform.position, player.position);
+
+    //         // Persigue al jugador si está más lejos que la distancia mínima
+    //         if (distance > stopDistance)
+    //         {
+    //             Vector3 direction = (player.position - transform.position).normalized;
+    //             transform.position += direction * speed * Time.deltaTime;
+
+    //             // Opcional: hacer que la cápsula mire hacia el jugador
+    //             transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
+    //         }
+    // }
+
+    void Update()
     {
-        UpdateTargetDirection();
-        // RotateTowardsTarget();
-        // SetVelocity();
+        Transform player = _playerDetectionController.PlayerTransform;
+        if (player != null)
+        {
+            float distance = Vector3.Distance(transform.position, player.position);
+            // Persigue al jugador si está más lejos que la distancia mínima
+
+            if (_playerDetectionController.PlayerDetected && distance > _stopDistance)
+            {
+                Vector3 direction = (player.position - transform.position).normalized;
+                transform.position += direction * _speed * Time.deltaTime;
+
+                // Opcional: hacer que la cápsula mire hacia el jugador
+                transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
+            }
+        }
     }
 
-    private void UpdateTargetDirection()
-    {
-        if (_playerDetectionController.PlayerDetected)
-        {
-            // Obtén la dirección hacia el jugador (en 3D)
-            _targetDirection = _playerDetectionController.DirectionToPlayer.normalized;
-        }
-        else
-        {
-            // Sin dirección objetivo
-            _targetDirection = Vector3.zero;
-        }
-    }
-
-    private void RotateTowardsTarget()
-    {
-        if (_targetDirection == Vector3.zero)
-        {
-            return;
-        }
-
-        // Calcula la rotación hacia el objetivo
-        Quaternion targetRotation = Quaternion.LookRotation(_targetDirection, Vector3.up);
-        _rigidbody.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-    }
-
-    private void SetVelocity()
-    {
-        if (_targetDirection == Vector3.zero)
-        {
-            // Detener al enemigo si no hay objetivo
-            _rigidbody.velocity = Vector3.zero;
-        }
-        else
-        {
-            // Mueve al enemigo hacia adelante en la dirección actual
-            _rigidbody.velocity = transform.forward * _speed;
-        }
-    }
 }
