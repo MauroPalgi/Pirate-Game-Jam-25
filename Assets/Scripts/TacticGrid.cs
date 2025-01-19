@@ -18,6 +18,9 @@ public class TacticGrid : MonoBehaviour
     [SerializeField]
     LayerMask terrainLayer;
 
+    [SerializeField]
+    bool showGizmoLabel;
+
     private void Awake()
     {
         GenerateGrid();
@@ -50,7 +53,6 @@ public class TacticGrid : MonoBehaviour
         {
             for (int x = 0; x < length; x++)
             {
-
                 // Origen del rayo
                 Vector3 rayOrigin = GetWorldPosition(x, y) + Vector3.up * 10f;
                 // Dirección del rayo
@@ -80,18 +82,17 @@ public class TacticGrid : MonoBehaviour
         }
     }
 
-
     public void RefreshPassableTerrain()
     {
         CheckPassableTerrain();
     }
+
     private void CheckPassableTerrain()
     {
         for (int y = 0; y < width; y++)
         {
             for (int x = 0; x < length; x++)
             {
-
                 Vector3 worldPos = GetWorldPosition(x, y);
                 bool passable = !Physics.CheckBox(
                     worldPos,
@@ -126,6 +127,25 @@ public class TacticGrid : MonoBehaviour
                 {
                     Vector3 pos = GetWorldPosition(x, y, true);
                     Gizmos.color = grid[x, y].passable ? Color.green : Color.red;
+                    if (showGizmoLabel)
+                    {
+                        UnityEditor.Handles.color = Color.white; // Color del texto
+                        string nodeInformation =
+                            "isP: "
+                            + grid[x, y].passable
+                            + "\n"
+                            + "w x: "
+                            + pos.x
+                            + " "
+                            + " - w y: "
+                            + pos.z
+                            + "\n"
+                            + "g x: "
+                            + x
+                            + " - g y: "
+                            + y;
+                        UnityEditor.Handles.Label(pos + Vector3.up * 0.3f, nodeInformation);
+                    }
                     Gizmos.DrawCube(pos, Vector3.one * cellSize * 0.1f);
                 }
             }
@@ -205,8 +225,8 @@ public class TacticGrid : MonoBehaviour
     {
         int x = UnityEngine.Random.Range(0, width);
         int y = UnityEngine.Random.Range(0, length);
-        Debug.Log(x);
-        Debug.Log(y);
+        Debug.Log("GetRandomGridWorldPosition x " + x);
+        Debug.Log("GetRandomGridWorldPosition y " + y);
         return GetWorldPosition(x, y);
     }
 }

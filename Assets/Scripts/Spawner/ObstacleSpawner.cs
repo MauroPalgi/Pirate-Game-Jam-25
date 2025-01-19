@@ -63,6 +63,7 @@ public class ObstacleSpawner : Singleton<ObstacleSpawner>
             LayerMask obstacleMask = grid.GetObstacleLayer();
             int layerIndex = LayerMask.NameToLayer("Wall");
             instance.layer = layerIndex;
+            instance.name = $"Obstacle {i} x: {randomPosition}";
 
             // Asigna la capa a todos los hijos
             SetLayerRecursively(instance, layerIndex);
