@@ -8,14 +8,24 @@ public class TacticGrid : MonoBehaviour
     Node[,] grid;
     public int width = 100;
     public int length = 100;
-    [SerializeField] private float cellSize = 3f;
-    [SerializeField] LayerMask obstacleLayer;
-    [SerializeField] LayerMask terrainLayer;
+
+    [SerializeField]
+    private float cellSize = 3f;
+
+    [SerializeField]
+    LayerMask obstacleLayer;
+
+    [SerializeField]
+    LayerMask terrainLayer;
 
     private void Awake()
     {
-
         GenerateGrid();
+    }
+
+    public LayerMask GetObstacleLayer()
+    {
+        return obstacleLayer;
     }
 
     private void GenerateGrid()
@@ -40,6 +50,7 @@ public class TacticGrid : MonoBehaviour
         {
             for (int x = 0; x < length; x++)
             {
+
                 // Origen del rayo
                 Vector3 rayOrigin = GetWorldPosition(x, y) + Vector3.up * 10f;
                 // Dirección del rayo
@@ -69,14 +80,25 @@ public class TacticGrid : MonoBehaviour
         }
     }
 
+
+    public void RefreshPassableTerrain()
+    {
+        CheckPassableTerrain();
+    }
     private void CheckPassableTerrain()
     {
         for (int y = 0; y < width; y++)
         {
             for (int x = 0; x < length; x++)
             {
+
                 Vector3 worldPos = GetWorldPosition(x, y);
-                bool passable = !Physics.CheckBox(worldPos, Vector3.one / 2, Quaternion.identity, obstacleLayer);
+                bool passable = !Physics.CheckBox(
+                    worldPos,
+                    Vector3.one / 2,
+                    Quaternion.identity,
+                    obstacleLayer
+                );
                 grid[x, y].passable = passable;
             }
         }
@@ -84,8 +106,6 @@ public class TacticGrid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-
-
         if (grid == null)
         {
             for (int y = 0; y < width; y++)
@@ -110,23 +130,26 @@ public class TacticGrid : MonoBehaviour
                 }
             }
         }
-
     }
 
     public Vector3 GetWorldPosition(int x, int y, bool elevation = false)
     {
-        Vector3 worldPosition = new Vector3(x * cellSize, elevation == true ? grid[x, y].elevation : 0f, y * cellSize) + transform.position;
+        Vector3 worldPosition =
+            new Vector3(x * cellSize, elevation == true ? grid[x, y].elevation : 0f, y * cellSize)
+            + transform.position;
         return worldPosition;
     }
 
     public bool CheckBoundry(Vector2Int positionOnGrid)
     {
-        return positionOnGrid.x >= 0 && positionOnGrid.x < length && positionOnGrid.y >= 0 && positionOnGrid.y < width;
+        return positionOnGrid.x >= 0
+            && positionOnGrid.x < length
+            && positionOnGrid.y >= 0
+            && positionOnGrid.y < width;
     }
 
     public Vector2Int GetGridPosition(Vector3 worldPosition)
     {
-        Debug.Log("World: " + worldPosition);
         worldPosition.x += cellSize / 2;
         worldPosition.y += cellSize / 2;
         return new Vector2Int(
@@ -141,10 +164,7 @@ public class TacticGrid : MonoBehaviour
         {
             grid[positionOnGrid.x, positionOnGrid.y].gridObject = gridObject;
         }
-        else
-        {
-
-        }
+        else { }
     }
 
     public GridObject GetPlacedObject(Vector2Int gridPosition)
@@ -156,10 +176,7 @@ public class TacticGrid : MonoBehaviour
     {
         for (int y = 0; y < width; y++)
         {
-            for (int x = 0; x < length; x++)
-            {
-
-            }
+            for (int x = 0; x < length; x++) { }
         }
     }
 
@@ -190,7 +207,6 @@ public class TacticGrid : MonoBehaviour
         int y = UnityEngine.Random.Range(0, length);
         Debug.Log(x);
         Debug.Log(y);
-        return GetWorldPosition(x, y, true);
+        return GetWorldPosition(x, y);
     }
-
 }

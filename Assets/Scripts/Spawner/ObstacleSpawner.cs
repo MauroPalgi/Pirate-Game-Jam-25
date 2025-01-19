@@ -57,7 +57,26 @@ public class ObstacleSpawner : Singleton<ObstacleSpawner>
 
             usedPositions.Add(randomPosition);
             Debug.Log($"Obstacle {i} Position: {randomPosition}");
-            Instantiate(obstacle, randomPosition, Quaternion.identity);
+
+            GameObject instance = Instantiate(obstacle, randomPosition, Quaternion.identity);
+            // Asigna la capa al objeto instanciado
+            LayerMask obstacleMask = grid.GetObstacleLayer();
+            int layerIndex = LayerMask.NameToLayer("Wall");
+            instance.layer = layerIndex;
+
+            // Asigna la capa a todos los hijos
+            SetLayerRecursively(instance, layerIndex);
+        }
+        grid.RefreshPassableTerrain();
+    }
+
+    private void SetLayerRecursively(GameObject obj, int layer)
+    {
+        obj.layer = layer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
         }
     }
 }
