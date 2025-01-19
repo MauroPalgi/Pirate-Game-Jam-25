@@ -17,8 +17,9 @@ public abstract class Spawner : Singleton<Spawner>
     protected GameState stateTrigger = GameState.Starting;
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         GameManager.OnGameStateChanged += HandleOnGameStateChanged;
     }
 
