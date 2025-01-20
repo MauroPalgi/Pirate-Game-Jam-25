@@ -84,16 +84,16 @@ public class TacticGrid : MonoBehaviour
 
     public void RefreshPassableTerrain()
     {
-        CheckPassableTerrain();
+        CheckPassableTerrain(true);
     }
 
-    private void CheckPassableTerrain()
+    private void CheckPassableTerrain(bool elevation = false)
     {
         for (int y = 0; y < width; y++)
         {
             for (int x = 0; x < length; x++)
             {
-                Vector3 worldPos = GetWorldPosition(x, y);
+                Vector3 worldPos = GetWorldPosition(x, y, elevation);
                 bool passable = !Physics.CheckBox(
                     worldPos,
                     Vector3.one / 2,
@@ -225,8 +225,39 @@ public class TacticGrid : MonoBehaviour
     {
         int x = UnityEngine.Random.Range(0, width);
         int y = UnityEngine.Random.Range(0, length);
-        Debug.Log("GetRandomGridWorldPosition x " + x);
-        Debug.Log("GetRandomGridWorldPosition y " + y);
         return GetWorldPosition(x, y);
+    }
+
+    public HashSet<Vector3> GetOcupiedGridHashSet()
+    {
+        HashSet<Vector3> ocupiedNodes = new HashSet<Vector3>();
+        for (int y = 0; y < width; y++)
+        {
+            for (int x = 0; x < length; x++)
+            {
+                if (grid[x, y].passable == false)
+                {
+                    ocupiedNodes.Add(GetWorldPosition(x, y));
+
+                }
+            }
+        }
+        return ocupiedNodes;
+
+    }
+
+     public Vector3 GetClosestGridNodePosition(Vector3 position)
+    {
+        // Tamaño de cada celda de la cuadrícula
+
+        // Redondear la posición del mundo a la posición más cercana de la cuadrícula
+        float x = Mathf.Round(position.x / cellSize) * cellSize;
+        float y = Mathf.Round(position.y / cellSize) * cellSize;
+        float z = Mathf.Round(position.z / cellSize) * cellSize;
+
+
+
+        // Retorna la posición ajustada
+        return new Vector3(x, y, z);
     }
 }

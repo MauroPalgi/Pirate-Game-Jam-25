@@ -11,6 +11,8 @@ public class PathNode : IEquatable<PathNode>
     public float hValue;
     public PathNode parentNode;
 
+    public bool visited;
+
     public PathNode(int x, int y)
     {
         pos_x = x;

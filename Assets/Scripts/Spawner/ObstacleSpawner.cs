@@ -5,11 +5,8 @@ using UnityEngine;
 
 public class ObstacleSpawner : Spawner
 {
-
     [SerializeField]
     private TacticGrid grid;
-
-
 
     private void SpawnObstacleRandomGridPosition()
     {
@@ -25,16 +22,26 @@ public class ObstacleSpawner : Spawner
             return;
         }
 
-        HashSet<Vector3> usedPositions = new HashSet<Vector3>(); // Para evitar posiciones repetidas
+        HashSet<Vector3> usedPositions = grid.GetOcupiedGridHashSet(); // Para evitar posiciones repetidas
+        Debug.Log(usedPositions.Count);
+
         for (int i = 0; i < amount; i++)
         {
-            Vector3 randomPosition;
-            do
+
+            bool positionAdded = false;
+            Vector3 randomPosition = new Vector3();
+            while (!positionAdded)
             {
                 randomPosition = grid.GetRandomGridWorldPosition();
-            } while (usedPositions.Contains(randomPosition));
+                if (!usedPositions.Contains(randomPosition))
+                {
+                    usedPositions.Add(randomPosition);
+                    positionAdded = true;
+                }
+            }
 
-            usedPositions.Add(randomPosition);
+            Debug.Log(usedPositions.Count);
+
             Debug.Log($"Obstacle {i} Position: {randomPosition}");
 
             GameObject instance = Instantiate(spaw, randomPosition, Quaternion.identity);
@@ -47,6 +54,7 @@ public class ObstacleSpawner : Spawner
             // Asigna la capa a todos los hijos
             SetLayerRecursively(instance, layerIndex);
         }
+
         grid.RefreshPassableTerrain();
     }
 
@@ -59,6 +67,10 @@ public class ObstacleSpawner : Spawner
             SetLayerRecursively(child.gameObject, layer);
         }
     }
+
+
+
+
 
     protected override void StateChangeEventHandler(GameState state)
     {
