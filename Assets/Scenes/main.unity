@@ -1070,16 +1070,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454ea0ee5cecb634f9908f278f168b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 15
-  length: 15
-  cellSize: 3
+  width: 10
+  length: 24
+  cellSize: 2
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 576
   terrainLayer:
     serializedVersion: 2
     m_Bits: 128
-  showGizmoLabel: 0
+  showGizmoLabel: 1
 --- !u!114 &1863881660
 MonoBehaviour:
   m_ObjectHideFlags: 0

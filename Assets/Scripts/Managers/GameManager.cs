@@ -34,7 +34,7 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleSpawnObtacles()
     {
-        Debug.Log("handle spawning");
+        // Debug.Log("handle spawning");
     }
 
     private void Update()

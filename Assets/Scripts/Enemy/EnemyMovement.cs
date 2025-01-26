@@ -125,8 +125,6 @@ public void SetTargetGrid(TacticGrid targetGrid)
             Transform player = _playerDetectionController.PlayerTransform;
             Vector2Int worldPos = _targetGrid.GetGridPosition(transform.position);
             Vector2Int playerWorldPos = _targetGrid.GetGridPosition(player.position);
-            Debug.Log("worldPos" + worldPos);
-            Debug.Log("playerWorldPos" + playerWorldPos);
             _playerPath = _pathFinder.FindPath(
                 worldPos.x,
                 worldPos.y,

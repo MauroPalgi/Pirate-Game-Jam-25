@@ -1,13 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public class TacticGrid : MonoBehaviour
 {
     Node[,] grid;
-    public int width = 100;
-    public int length = 100;
+
+    [SerializeField]
+    private int width = 10;
+
+    [SerializeField]
+    private int length = 24;
 
     [SerializeField]
     private float cellSize = 3f;
@@ -20,6 +25,16 @@ public class TacticGrid : MonoBehaviour
 
     [SerializeField]
     bool showGizmoLabel;
+
+    public int GetLength()
+    {
+        return length;
+    }
+
+    public int GetWidth()
+    {
+        return width;
+    }
 
     private void Awake()
     {
@@ -155,8 +170,8 @@ public class TacticGrid : MonoBehaviour
     public Vector3 GetWorldPosition(int x, int y, bool elevation = false)
     {
         Vector3 worldPosition =
-            new Vector3(x * cellSize, elevation == true ? grid[x, y].elevation : 0f, y * cellSize)
-            + transform.position;
+            new Vector3(x * cellSize, elevation == true ? grid[x, y].elevation : 0f, y * cellSize);
+        // + transform.position;
         return worldPosition;
     }
 
@@ -221,11 +236,43 @@ public class TacticGrid : MonoBehaviour
         return worldPosition;
     }
 
+    public Dictionary<Vector2Int, Vector3> GetRandomSpawnPositionData()
+    {
+        // Generar coordenadas aleatorias dentro del tamaño del grid
+        int x = UnityEngine.Random.Range(0, width);
+        int y = UnityEngine.Random.Range(0, length);
+
+        // Depuración para verificar los valores
+        Debug.Log("Grid Width: " + width);
+        Debug.Log("Grid Length: " + length);
+        Debug.Log("Random X: " + x);
+        Debug.Log("Random Y: " + y);
+
+        // Crear el diccionario con la posición del grid como clave y su posición en el mundo como valor
+        Dictionary<Vector2Int, Vector3> spawnData = new Dictionary<Vector2Int, Vector3>
+        {
+            { new Vector2Int(x, y), new Vector3(x * cellSize, 0, y * cellSize) }
+        };
+
+        return spawnData;
+    }
+
     public Vector3 GetRandomGridWorldPosition()
     {
         int x = UnityEngine.Random.Range(0, width);
         int y = UnityEngine.Random.Range(0, length);
+        Debug.Log(width);
+        Debug.Log(length);
+        Debug.Log("x " + x);
+        Debug.Log("y " + y);
         return GetWorldPosition(x, y);
+    }
+
+    public Vector2Int GetRandomPosition()
+    {
+        int x = UnityEngine.Random.Range(0, width);
+        int y = UnityEngine.Random.Range(0, length);
+        return new Vector2Int(x, y);
     }
 
     public HashSet<Vector3> GetOcupiedGridHashSet()
@@ -238,15 +285,13 @@ public class TacticGrid : MonoBehaviour
                 if (grid[x, y].passable == false)
                 {
                     ocupiedNodes.Add(GetWorldPosition(x, y));
-
                 }
             }
         }
         return ocupiedNodes;
-
     }
 
-     public Vector3 GetClosestGridNodePosition(Vector3 position)
+    public Vector3 GetClosestGridNodePosition(Vector3 position)
     {
         // Tamaño de cada celda de la cuadrícula
 
@@ -254,8 +299,6 @@ public class TacticGrid : MonoBehaviour
         float x = Mathf.Round(position.x / cellSize) * cellSize;
         float y = Mathf.Round(position.y / cellSize) * cellSize;
         float z = Mathf.Round(position.z / cellSize) * cellSize;
-
-
 
         // Retorna la posición ajustada
         return new Vector3(x, y, z);

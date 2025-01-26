@@ -24,10 +24,10 @@ public class PathFinder : MonoBehaviour
             gridMap = GetComponent<TacticGrid>();
         }
 
-        pathNodes = new PathNode[gridMap.length, gridMap.width];
-        for (int y = 0; y < gridMap.width; y++)
+        pathNodes = new PathNode[gridMap.GetLength(), gridMap.GetWidth()];
+        for (int y = 0; y < gridMap.GetWidth(); y++)
         {
-            for (int x = 0; x < gridMap.length; x++)
+            for (int x = 0; x < gridMap.GetLength(); x++)
             {
                 pathNodes[x, y] = new PathNode(x, y);
             }

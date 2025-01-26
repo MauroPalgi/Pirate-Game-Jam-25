@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using UnityEngine;
 
 public class EnemySpawner : Spawner
@@ -29,27 +30,27 @@ public class EnemySpawner : Spawner
         }
 
         HashSet<Vector3> usedPositions = grid.GetOcupiedGridHashSet(); // Para evitar posiciones repetidas
-        Debug.Log(usedPositions.Count);
 
         for (int i = 0; i < amount; i++)
         {
             bool positionAdded = false;
-            Vector3 randomPosition = new Vector3();
+            Dictionary<Vector2Int, Vector3> randomPosition = null;
             while (!positionAdded)
             {
-                randomPosition = grid.GetRandomGridWorldPosition();
-                if (!usedPositions.Contains(randomPosition))
+                randomPosition = grid.GetRandomSpawnPositionData();
+                if (!usedPositions.Contains(randomPosition.First().Value))
                 {
-                    usedPositions.Add(randomPosition);
+                    usedPositions.Add(randomPosition.First().Value);
                     positionAdded = true;
                 }
             }
 
-            Debug.Log(usedPositions.Count);
-
             Debug.Log($"Enemy {i} Position: {randomPosition}");
-            Debug.Log(spaw);
-            GameObject instance = Instantiate(spaw, randomPosition, Quaternion.identity);
+            GameObject instance = Instantiate(
+                spaw,
+                randomPosition.First().Value,
+                Quaternion.identity
+            );
             EnemyMovement enemyMovement = instance.GetComponent<EnemyMovement>();
 
             // Validar que se encontró el componente y asignar el targetGrid
@@ -60,9 +61,11 @@ public class EnemySpawner : Spawner
 
             // Asigna la capa al objeto instanciado
             LayerMask obstacleMask = grid.GetObstacleLayer();
+            Debug.Log("Obstacle mask " + obstacleMask);
             int layerIndex = LayerMask.NameToLayer("Enemy");
             instance.layer = layerIndex;
-            instance.name = $"Enemy {i} x: {randomPosition}";
+            instance.name =
+                $"Enemy {i} - {randomPosition.First().Key.ToString()} - {randomPosition.First().Value.ToString()}";
 
             // Asigna la capa a todos los hijos
             SetLayerRecursively(instance, layerIndex);
