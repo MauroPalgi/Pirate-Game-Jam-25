@@ -26,10 +26,10 @@ public class EnemyMovement : MonoBehaviour
 
 
 
-public void SetTargetGrid(TacticGrid targetGrid)
-{
-    this._targetGrid = targetGrid;
-}
+    public void SetTargetGrid(TacticGrid targetGrid)
+    {
+        this._targetGrid = targetGrid;
+    }
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -66,24 +66,37 @@ public void SetTargetGrid(TacticGrid targetGrid)
     {
         foreach (PathNode node in _playerPath)
         {
+
+
             // Obtener la posición del mundo del nodo
             Vector3 targetPosition = _targetGrid.GetWorldPosition(node.pos_x, node.pos_y);
 
             // Mover al enemigo hacia el nodo
             while (Vector3.Distance(transform.position, targetPosition) >= 1f && !node.visited)
             {
-                transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    targetPosition,
-                    _speed * Time.deltaTime
-                );
+                // transform.position = Vector3.MoveTowards(
+                //     transform.position,
+                //     targetPosition,
+                //     _speed * Time.deltaTime
+                // );
+
+                transform.position = targetPosition;
+
                 if (Vector3.Distance(transform.position, targetPosition) < 1.5f)
                 {
                     node.visited = true;
+
+
                 }
+                yield return new WaitForSeconds(10f); // Esperar al siguiente frame
                 yield return null; // Esperar al siguiente frame
             }
         }
+    }
+
+    public float GetDistanceToPlayer()
+    {
+        return _player != null ? Vector3.Distance(transform.position, _player.position) : -1f;
     }
 
     private void MoveAndLookAtPlayer()
