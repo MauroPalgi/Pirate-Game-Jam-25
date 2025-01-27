@@ -2,23 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : GridObject
 {
-
     [SerializeField]
     private State currentState = State.Idle;
 
     // Variables de estado
-    [SerializeField]
-    private Transform[] patrolPoints; // Puntos de patrulla
+
     [SerializeField]
     private Transform player;
+
     [SerializeField]
     private float chaseRange = 10f;
+
     [SerializeField]
     private float attackRange = 2f;
+
     [SerializeField]
     private float patrolSpeed = 2f;
+
     [SerializeField]
     private float chaseSpeed = 4f;
 
@@ -69,40 +71,25 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void PatrolState()
-    {
-        if (patrolPoints.Length == 0) return;
-
-        // Moverse hacia el punto actual
-        Transform targetPoint = patrolPoints[currentPatrolIndex];
-        transform.position = Vector3.MoveTowards(transform.position, targetPoint.position, patrolSpeed * Time.deltaTime);
-
-        // Cambiar al siguiente punto si llega al objetivo
-        if (Vector3.Distance(transform.position, targetPoint.position) < 0.1f)
-        {
-            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-        }
-
-        // Cambiar a estado de persecución si el jugador está cerca
-        if (Vector3.Distance(transform.position, player.position) < chaseRange)
-        {
-            SwitchState(State.Chase);
-        }
-    }
+    private void PatrolState() { }
 
     private void ChaseState()
     {
-        if (player == null) return;
+        if (player == null)
+            return;
 
         // Moverse hacia el jugador
-        transform.position = Vector3.MoveTowards(transform.position, player.position, chaseSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            player.position,
+            chaseSpeed * Time.deltaTime
+        );
 
         // Cambiar a estado de ataque si está cerca del jugador
         if (Vector3.Distance(transform.position, player.position) < attackRange)
         {
             SwitchState(State.Attack);
         }
-
         // Regresar a patrulla si el jugador está fuera de rango
         else if (Vector3.Distance(transform.position, player.position) > chaseRange)
         {
@@ -133,9 +120,12 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         SwitchState(newState);
     }
+
+    public State GetCurrentState()
+    {
+        return currentState;
+    }
 }
-
-
 
 public enum State
 {

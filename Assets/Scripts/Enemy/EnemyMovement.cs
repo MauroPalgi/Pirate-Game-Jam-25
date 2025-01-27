@@ -21,21 +21,24 @@ public class EnemyMovement : MonoBehaviour
     private PathFinder _pathFinder;
     private Vector3 _targetDirection; // Cambiado a Vector3 para 3D
     private List<PathNode> _playerPath;
-
     private Transform _player;
 
+    private GridPath _patrolPath = null;
 
+    [SerializeField]
+    private Enemy _enemyState;
 
     public void SetTargetGrid(TacticGrid targetGrid)
     {
         this._targetGrid = targetGrid;
     }
+
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _playerDetectionController = GetComponent<PlayerDetection>();
         _pathFinder = _targetGrid.GetComponent<PathFinder>();
-
+        SnapIntoGrid();
     }
 
     private void OnDrawGizmos()
@@ -66,8 +69,6 @@ public class EnemyMovement : MonoBehaviour
     {
         foreach (PathNode node in _playerPath)
         {
-
-
             // Obtener la posición del mundo del nodo
             Vector3 targetPosition = _targetGrid.GetWorldPosition(node.pos_x, node.pos_y);
 
@@ -85,8 +86,6 @@ public class EnemyMovement : MonoBehaviour
                 if (Vector3.Distance(transform.position, targetPosition) < 1.5f)
                 {
                     node.visited = true;
-
-
                 }
                 yield return new WaitForSeconds(10f); // Esperar al siguiente frame
                 yield return null; // Esperar al siguiente frame
@@ -117,6 +116,7 @@ public class EnemyMovement : MonoBehaviour
     private void SnapIntoGrid()
     {
         Vector3 gridWorldPos = _targetGrid.GetClosestGridNodePosition(transform.position);
+
         transform.position = gridWorldPos;
     }
 
@@ -147,13 +147,17 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
-        // SnapIntoGrid();
-        LoadPlayerTranform();
-        CalculatePlayerPath();
-        LookAtPlayer();
-        MoveTowardsPlayer();
+        if (_enemyState.GetCurrentState() == State.Patrol)
+        {
+            if (_patrolPath == null)
+            {
+                _patrolPath = _targetGrid.GeneratePatrolPath(transform);
+                _patrolPath.LogPath();
+                _targetGrid.SetPathToDraw(_patrolPath.GetWorldPositions());
+            }
+        }
     }
 
     private void LoadPlayerTranform()

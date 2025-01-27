@@ -26,6 +26,13 @@ public class TacticGrid : MonoBehaviour
     [SerializeField]
     bool showGizmoLabel;
 
+    private List<Vector3> _pathToDraw = null;
+
+    public void SetPathToDraw(List<Vector3> path)
+    {
+        _pathToDraw = path;
+    }
+
     public int GetLength()
     {
         return length;
@@ -38,6 +45,7 @@ public class TacticGrid : MonoBehaviour
 
     private void Awake()
     {
+        _pathToDraw = new List<Vector3>();
         GenerateGrid();
     }
 
@@ -54,73 +62,79 @@ public class TacticGrid : MonoBehaviour
         {
             for (int x = 0; x < length; x++)
             {
-                grid[x, y] = new Node();
+                Node newNode = new Node(x, y);
+                CalculateNodeElevation(newNode);
+                CalculateNodePassableTerrain(newNode);
+                grid[x, y] = newNode;
             }
         }
-
-        CalculateElevation();
-        CheckPassableTerrain();
     }
 
-    private void CalculateElevation()
+    private void CalculateNodeElevation(Node node)
+    {
+        // Origen del rayo
+        Vector3 rayOrigin = GetWorldPosition(node.pos_x, node.pos_y) + Vector3.up * 10f;
+
+        // Dirección del rayo
+        Vector3 rayDirection = Vector3.down;
+        Ray ray = new Ray(rayOrigin, rayDirection);
+
+        // Realizar el raycast
+        if (
+            Physics.Raycast(ray, out RaycastHit hit, 20f, terrainLayer)
+            || Physics.Raycast(ray, out hit, 20f, obstacleLayer)
+        )
+        {
+            // Asignar la elevación al nodo
+            node.elevation = hit.point.y;
+
+            // Opcional: Dibujar un punto donde el raycast golpea
+            Debug.DrawLine(hit.point, hit.point + Vector3.up * 0.5f, Color.green, 2f);
+        }
+    }
+
+    private void CalculateGridElevation()
     {
         for (int y = 0; y < width; y++)
         {
             for (int x = 0; x < length; x++)
             {
-                // Origen del rayo
-                Vector3 rayOrigin = GetWorldPosition(x, y) + Vector3.up * 10f;
-                // Dirección del rayo
-                Vector3 rayDirection = Vector3.down;
-                Ray ray = new Ray(rayOrigin, rayDirection);
-
-                // Dibujar el raycast (línea desde el origen hasta el límite del rayo)
-                // Debug.DrawLine(rayOrigin, rayOrigin + rayDirection * 20f, Color.red, 10f);
-
-                // Realizar el raycast
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 20f, terrainLayer))
-                {
-                    grid[x, y].elevation = hit.point.y;
-
-                    // Opcional: Dibujar un punto donde el raycast golpea
-                    // Debug.DrawLine(hit.point, hit.point + Vector3.up * 0.5f, Color.green, 2f);
-                }
-                if (Physics.Raycast(ray, out hit, 20f, obstacleLayer))
-                {
-                    grid[x, y].elevation = hit.point.y;
-
-                    // Opcional: Dibujar un punto donde el raycast golpea
-                    // Debug.DrawLine(hit.point, hit.point + Vector3.up * 0.5f, Color.green, 2f);
-                }
+                Node currentNode = grid[x, y];
+                CalculateNodeElevation(currentNode);
             }
         }
     }
 
     public void RefreshPassableTerrain()
     {
-        CheckPassableTerrain(true);
+        CheckGridPassableTerrain(true);
     }
 
-    private void CheckPassableTerrain(bool elevation = false)
+    private void CalculateNodePassableTerrain(Node node, bool elevation = false)
+    {
+        Vector3 worldPos = GetWorldPosition(node.pos_x, node.pos_y, elevation);
+        bool passable = !Physics.CheckBox(
+            worldPos,
+            Vector3.one / 2,
+            Quaternion.identity,
+            obstacleLayer
+        );
+        node.passable = passable;
+    }
+
+    private void CheckGridPassableTerrain(bool elevation = false)
     {
         for (int y = 0; y < width; y++)
         {
             for (int x = 0; x < length; x++)
             {
-                Vector3 worldPos = GetWorldPosition(x, y, elevation);
-                bool passable = !Physics.CheckBox(
-                    worldPos,
-                    Vector3.one / 2,
-                    Quaternion.identity,
-                    obstacleLayer
-                );
-                grid[x, y].passable = passable;
+                Node currenNode = grid[x, y];
+                CalculateNodePassableTerrain(currenNode, elevation);
             }
         }
     }
 
-    private void OnDrawGizmos()
+    private void DrawNodeCubes()
     {
         if (grid == null)
         {
@@ -167,10 +181,34 @@ public class TacticGrid : MonoBehaviour
         }
     }
 
+    private void DrawPathLines()
+    {
+        if (_pathToDraw != null)
+        {
+            for (int i = 0; i < _pathToDraw.Count - 1; i++)
+            {
+                Vector3 wpNode = _pathToDraw[i];
+                Vector3 nextWpNode = _pathToDraw[i + 1];
+                Gizmos.color = Color.black;
+                Gizmos.DrawLine(wpNode, nextWpNode);
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Debug.Log("OnDrawGizmos - grid");
+        DrawNodeCubes();
+        DrawPathLines();
+    }
+
     public Vector3 GetWorldPosition(int x, int y, bool elevation = false)
     {
-        Vector3 worldPosition =
-            new Vector3(x * cellSize, elevation == true ? grid[x, y].elevation : 0f, y * cellSize);
+        Vector3 worldPosition = new Vector3(
+            x * cellSize,
+            elevation == true ? grid[x, y].elevation : 0f,
+            y * cellSize
+        );
         // + transform.position;
         return worldPosition;
     }
@@ -242,12 +280,6 @@ public class TacticGrid : MonoBehaviour
         int x = UnityEngine.Random.Range(0, width);
         int y = UnityEngine.Random.Range(0, length);
 
-        // Depuración para verificar los valores
-        Debug.Log("Grid Width: " + width);
-        Debug.Log("Grid Length: " + length);
-        Debug.Log("Random X: " + x);
-        Debug.Log("Random Y: " + y);
-
         // Crear el diccionario con la posición del grid como clave y su posición en el mundo como valor
         Dictionary<Vector2Int, Vector3> spawnData = new Dictionary<Vector2Int, Vector3>
         {
@@ -261,10 +293,6 @@ public class TacticGrid : MonoBehaviour
     {
         int x = UnityEngine.Random.Range(0, width);
         int y = UnityEngine.Random.Range(0, length);
-        Debug.Log(width);
-        Debug.Log(length);
-        Debug.Log("x " + x);
-        Debug.Log("y " + y);
         return GetWorldPosition(x, y);
     }
 
@@ -291,6 +319,12 @@ public class TacticGrid : MonoBehaviour
         return ocupiedNodes;
     }
 
+    public Node GetNodeByWorldPosition(Transform transform)
+    {
+        Vector2Int gridPosition = GetGridPosition(transform.position);
+        return grid[gridPosition.x, gridPosition.y];
+    }
+
     public Vector3 GetClosestGridNodePosition(Vector3 position)
     {
         // Tamaño de cada celda de la cuadrícula
@@ -303,4 +337,41 @@ public class TacticGrid : MonoBehaviour
         // Retorna la posición ajustada
         return new Vector3(x, y, z);
     }
+
+    public GridPath GeneratePatrolPath(Transform transform)
+    {
+        Node node = GetNodeByWorldPosition(transform);
+        List<Node> nodes = new List<Node>();
+        List<Vector3> worldPos = new List<Vector3>();
+        int steps = 5;
+        PatrolDirections direction = PatrolDirections.Horizontal;
+        for (int i = 1; i <= steps; i++)
+        {
+            if (direction == PatrolDirections.Horizontal)
+            {
+                Node currentNode = grid[node.pos_x + i, node.pos_y];
+                if (currentNode.passable == true)
+                {
+                    nodes.Add(currentNode);
+                    worldPos.Add(GetWorldPosition(currentNode.pos_x, currentNode.pos_y));
+                }
+            }
+            if (direction == PatrolDirections.Vertical)
+            {
+                Node currentNode = grid[node.pos_x, node.pos_y + 1];
+                if (currentNode.passable)
+                {
+                    nodes.Add(currentNode);
+                    worldPos.Add(GetWorldPosition(currentNode.pos_x, currentNode.pos_y));
+                }
+            }
+        }
+        return new GridPath(nodes, worldPos);
+    }
+}
+
+public enum PatrolDirections
+{
+    Horizontal,
+    Vertical,
 }

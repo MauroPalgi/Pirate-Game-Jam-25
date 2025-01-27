@@ -35,4 +35,9 @@ public class PathNode : IEquatable<PathNode>
     {
         return pos_x.GetHashCode() ^ pos_y.GetHashCode();
     }
+
+    public override string ToString()
+    {
+        return $"PathNode (X: {pos_x}, Y: {pos_y}, G: {gValue:F2}, H: {hValue:F2}, F: {fValue:F2}, Visited: {visited})";
+    }
 }
