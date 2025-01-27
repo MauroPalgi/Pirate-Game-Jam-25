@@ -197,7 +197,6 @@ public class TacticGrid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Debug.Log("OnDrawGizmos - grid");
         DrawNodeCubes();
         DrawPathLines();
     }
@@ -345,7 +344,7 @@ public class TacticGrid : MonoBehaviour
         List<Vector3> worldPos = new List<Vector3>();
         int steps = 5;
         PatrolDirections direction = PatrolDirections.Horizontal;
-        for (int i = 1; i <= steps; i++)
+        for (int i = 0; i < steps; i++)
         {
             if (direction == PatrolDirections.Horizontal)
             {

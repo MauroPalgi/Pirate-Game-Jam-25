@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
@@ -22,6 +23,9 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 _targetDirection; // Cambiado a Vector3 para 3D
     private List<PathNode> _playerPath;
     private Transform _player;
+
+    private bool _isFollowingPath = false;
+
 
     private GridPath _patrolPath = null;
 
@@ -58,39 +62,44 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // Método para iniciar el movimiento por el camino
-    public void FollowPath()
+    public void FollowPath(List<Node> path)
     {
         StopAllCoroutines(); // Detener cualquier movimiento previo
-        StartCoroutine(MoveAlongPath());
+        StartCoroutine(MoveAlongPath(path));
     }
 
-    // Corutina para mover al enemigo a través de los nodos del camino
-    private IEnumerator MoveAlongPath()
+    private IEnumerator MoveAlongPath(List<Node> path)
     {
-        foreach (PathNode node in _playerPath)
+        for (int i = 0; i < path.Count; i++)
         {
-            // Obtener la posición del mundo del nodo
+            Node node = path[i];
             Vector3 targetPosition = _targetGrid.GetWorldPosition(node.pos_x, node.pos_y);
 
-            // Mover al enemigo hacia el nodo
-            while (Vector3.Distance(transform.position, targetPosition) >= 1f && !node.visited)
+            // Log para depurar las posiciones objetivo
+            Debug.Log($"Moving to Node {i}: {targetPosition}");
+
+            // Moverse al nodo
+            while (
+                Vector3.Distance(
+                    new Vector3(transform.position.x, 0, transform.position.z),
+                    new Vector3(targetPosition.x, 0, targetPosition.z)
+                ) >= 0.1f
+            ) // Usar un umbral pequeño y descartar la diferencia en Y
             {
-                // transform.position = Vector3.MoveTowards(
-                //     transform.position,
-                //     targetPosition,
-                //     _speed * Time.deltaTime
-                // );
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    targetPosition,
+                    _speed * Time.deltaTime
+                );
 
-                transform.position = targetPosition;
-
-                if (Vector3.Distance(transform.position, targetPosition) < 1.5f)
-                {
-                    node.visited = true;
-                }
-                yield return new WaitForSeconds(10f); // Esperar al siguiente frame
                 yield return null; // Esperar al siguiente frame
             }
+            // Camino completado
+            Debug.Log($"Reached Node {i}");
         }
+        _isFollowingPath = false;
+
+        Debug.Log("Path completed");
     }
 
     public float GetDistanceToPlayer()
@@ -126,9 +135,9 @@ public class EnemyMovement : MonoBehaviour
         transform.LookAt(new Vector3(_player.position.x, transform.position.y, _player.position.z));
     }
 
-    private void MoveTowardsPlayer()
+    private void MoveTowardsPlayer(List<Node> path)
     {
-        FollowPath();
+        FollowPath(path);
     }
 
     private void CalculatePlayerPath()
@@ -151,15 +160,27 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_enemyState.GetCurrentState() == State.Patrol)
         {
+            HandlePatrolState();
+        }
+    }
+
+    private void HandlePatrolState()
+    {
+        if (!_isFollowingPath)
+        {
             if (_patrolPath == null)
             {
                 _patrolPath = _targetGrid.GeneratePatrolPath(transform);
                 _patrolPath.LogPath();
                 _targetGrid.SetPathToDraw(_patrolPath.GetWorldPositions());
             }
+
+            List<Node> pathNodes = _patrolPath.GetNodes();
+            _isFollowingPath = true; // Indicar que se está siguiendo el camino
+            
+            FollowPath(pathNodes);
         }
     }
-
     private void LoadPlayerTranform()
     {
         if (_playerDetectionController != null)

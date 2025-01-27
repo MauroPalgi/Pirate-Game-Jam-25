@@ -11,6 +11,11 @@ public class GridPath
     {
         return _worldPosition;
     }
+
+    public List<Node> GetNodes()
+    {
+        return _nodes;
+    }
     // Constructor
     public GridPath(List<Node> nodes, List<Vector3> worldPosition)
     {
