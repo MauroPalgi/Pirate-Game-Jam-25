@@ -693,7 +693,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12
+      value: 20.85
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -701,7 +701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 24
+      value: 6.51
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1139,8 +1139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454ea0ee5cecb634f9908f278f168b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 50
-  length: 50
+  width: 20
+  length: 20
   cellSize: 1.73
   obstacleLayer:
     serializedVersion: 2
