@@ -34,7 +34,8 @@ public class Enemy : GridObject
         enemyMovement = GetComponent<EnemyMovement>();
         StartCoroutine(StateMachine());
     }
-
+    //Dejar solo Idle y chase
+    //Simplificar statemachine
     private IEnumerator StateMachine()
     {
         while (true)
@@ -137,6 +138,7 @@ public class Enemy : GridObject
 
 public enum State
 {
+    
     Idle,
     Patrol,
     Chase,

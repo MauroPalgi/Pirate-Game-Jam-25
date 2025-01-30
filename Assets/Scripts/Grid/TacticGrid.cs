@@ -276,8 +276,8 @@ public class TacticGrid : MonoBehaviour
     public Dictionary<Vector2Int, Vector3> GetRandomSpawnPositionData()
     {
         // Generar coordenadas aleatorias dentro del tamaño del grid
-        int x = UnityEngine.Random.Range(0, width);
-        int y = UnityEngine.Random.Range(0, length);
+        int x = UnityEngine.Random.Range(0, width + 1);
+        int y = UnityEngine.Random.Range(0, length+ 1);
 
         // Crear el diccionario con la posición del grid como clave y su posición en el mundo como valor
         Dictionary<Vector2Int, Vector3> spawnData = new Dictionary<Vector2Int, Vector3>
@@ -290,15 +290,15 @@ public class TacticGrid : MonoBehaviour
 
     public Vector3 GetRandomGridWorldPosition()
     {
-        int x = UnityEngine.Random.Range(0, width);
-        int y = UnityEngine.Random.Range(0, length);
+        int x = UnityEngine.Random.Range(0, width + 1);
+        int y = UnityEngine.Random.Range(0, length + 1);
         return GetWorldPosition(x, y);
     }
 
     public Vector2Int GetRandomPosition()
     {
-        int x = UnityEngine.Random.Range(0, width);
-        int y = UnityEngine.Random.Range(0, length);
+        int x = UnityEngine.Random.Range(0, width + 1);
+        int y = UnityEngine.Random.Range(0, length+ 1);
         return new Vector2Int(x, y);
     }
 

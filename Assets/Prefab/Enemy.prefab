@@ -225,7 +225,8 @@ GameObject:
   - component: {fileID: 8388434389894249319}
   - component: {fileID: 2951347281092504181}
   - component: {fileID: 8733467818696491216}
-  m_Layer: 0
+  - component: {fileID: 5211183341377480766}
+  m_Layer: 3
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,6 +306,7 @@ MonoBehaviour:
   _rotationSpeed: 40
   _stopDistance: 0.5
   _targetGrid: {fileID: 0}
+  _enemyState: {fileID: 0}
 --- !u!114 &8733467818696491216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,10 +319,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca81e581e85ea6b47b349ed13dc09e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetGrid: {fileID: 0}
+  positionOnGrid: {x: 0, y: 0}
   currentState: 0
-  patrolPoints: []
   player: {fileID: 1886620746992726570}
   chaseRange: 10
   attackRange: 2
   patrolSpeed: 2
   chaseSpeed: 4
+--- !u!136 &5211183341377480766
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5410862024415379451}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
