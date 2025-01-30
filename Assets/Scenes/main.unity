@@ -903,7 +903,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 32.48
+      value: 16.06
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -911,7 +911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.54
+      value: 8.81
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -944,14 +944,26 @@ PrefabInstance:
     - target: {fileID: 2951347281092504181, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: _enemyState
       value: 
-      objectReference: {fileID: 80138588}
+      objectReference: {fileID: 0}
     - target: {fileID: 2951347281092504181, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: _targetGrid
       value: 
       objectReference: {fileID: 1863881659}
+    - target: {fileID: 3833078195835198349, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4648068188246845071, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5410862024415379451, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5410862024415379451, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8485617057221129219, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1440,7 +1452,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1863881658}
   - component: {fileID: 1863881659}
-  - component: {fileID: 1863881660}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged

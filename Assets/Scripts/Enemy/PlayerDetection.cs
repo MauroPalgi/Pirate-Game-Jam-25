@@ -18,9 +18,7 @@ public class PlayerDetection : MonoBehaviour
 
     void Awake()
     {
-        ConeRaycaster player = FindObjectOfType<ConeRaycaster>();
-        _player = player.transform;
-        PlayerTransform = player.transform;
+        PlayerTransform = _player.transform;
     }
 
     // Update is called once per frame
