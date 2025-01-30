@@ -16,7 +16,7 @@ public class EnemyMovement : MonoBehaviour
     private float _stopDistance = 0.5f;
 
     [SerializeField]
-    private TacticGrid _targetGrid;
+    private TacticGrid _tacticGrid;
     private Rigidbody _rigidbody;
     private PlayerDetection _playerDetectionController;
     private PathFinder _pathFinder;
@@ -32,16 +32,16 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField]
     private Enemy _enemyState;
 
-    public void SetTargetGrid(TacticGrid targetGrid)
+    public void SetTargetGrid(TacticGrid tacticGrid)
     {
-        this._targetGrid = targetGrid;
+        this._tacticGrid = tacticGrid;
     }
 
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _playerDetectionController = GetComponent<PlayerDetection>();
-        _pathFinder = _targetGrid.GetComponent<PathFinder>();
+        _pathFinder = _tacticGrid.GetComponent<PathFinder>();
         SnapIntoGrid();
     }
 
@@ -49,7 +49,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_playerDetectionController != null && _playerPath != null)
         {
-            List<Vector3> wpNodes = _targetGrid.ConvertPathNodesToWorlPosition(_playerPath);
+            List<Vector3> wpNodes = _tacticGrid.ConvertPathNodesToWorlPosition(_playerPath);
 
             for (int i = 0; i < wpNodes.Count - 1; i++)
             {
@@ -62,18 +62,18 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // Método para iniciar el movimiento por el camino
-    public void FollowPath(List<Node> path)
+    public void FollowPath(List<PathNode> path)
     {
         StopAllCoroutines(); // Detener cualquier movimiento previo
         StartCoroutine(MoveAlongPath(path));
     }
 
-    private IEnumerator MoveAlongPath(List<Node> path)
+    private IEnumerator MoveAlongPath(List<PathNode> path)
     {
         for (int i = 0; i < path.Count; i++)
         {
-            Node node = path[i];
-            Vector3 targetPosition = _targetGrid.GetWorldPosition(node.pos_x, node.pos_y);
+            Node node = (Node)path[i];
+            Vector3 targetPosition = _tacticGrid.GetWorldPosition(node.pos_x, node.pos_y);
 
             // Log para depurar las posiciones objetivo
             Debug.Log($"Moving to Node {i}: {targetPosition}");
@@ -124,7 +124,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void SnapIntoGrid()
     {
-        Vector3 gridWorldPos = _targetGrid.GetClosestGridNodePosition(transform.position);
+        Vector3 gridWorldPos = _tacticGrid.GetClosestGridNodePosition(transform.position);
 
         transform.position = gridWorldPos;
     }
@@ -135,7 +135,7 @@ public class EnemyMovement : MonoBehaviour
         transform.LookAt(new Vector3(_player.position.x, transform.position.y, _player.position.z));
     }
 
-    private void MoveTowardsPlayer(List<Node> path)
+    private void MoveTowardsPlayer(List<PathNode> path)
     {
         FollowPath(path);
     }
@@ -145,8 +145,8 @@ public class EnemyMovement : MonoBehaviour
         if (_playerDetectionController != null && _playerPath == null)
         {
             Transform player = _playerDetectionController.PlayerTransform;
-            Vector2Int worldPos = _targetGrid.GetGridPosition(transform.position);
-            Vector2Int playerWorldPos = _targetGrid.GetGridPosition(player.position);
+            Vector2Int worldPos = _tacticGrid.GetGridPosition(transform.position);
+            Vector2Int playerWorldPos = _tacticGrid.GetGridPosition(player.position);
             _playerPath = _pathFinder.FindPath(
                 worldPos.x,
                 worldPos.y,
@@ -158,27 +158,11 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        if (_enemyState.GetCurrentState() == State.Patrol)
+        if (_playerDetectionController.PlayerDetected)
         {
-            HandlePatrolState();
-        }
-    }
-
-    private void HandlePatrolState()
-    {
-        if (!_isFollowingPath)
-        {
-            if (_patrolPath == null)
-            {
-                _patrolPath = _targetGrid.GeneratePatrolPath(transform);
-                _patrolPath.LogPath();
-                _targetGrid.SetPathToDraw(_patrolPath.GetWorldPositions());
-            }
-
-            List<Node> pathNodes = _patrolPath.GetNodes();
-            _isFollowingPath = true; // Indicar que se está siguiendo el camino
-            
-            FollowPath(pathNodes);
+            CalculatePlayerPath();
+            LookAtPlayer();
+            MoveTowardsPlayer(_playerPath);
         }
     }
     private void LoadPlayerTranform()

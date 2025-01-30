@@ -290,15 +290,15 @@ public class TacticGrid : MonoBehaviour
 
     public Vector3 GetRandomGridWorldPosition()
     {
-        int x = UnityEngine.Random.Range(0, width + 1);
-        int y = UnityEngine.Random.Range(0, length + 1);
+        int x = UnityEngine.Random.Range(0, length);
+        int y = UnityEngine.Random.Range(0, width);
         return GetWorldPosition(x, y);
     }
 
     public Vector2Int GetRandomPosition()
     {
-        int x = UnityEngine.Random.Range(0, width + 1);
-        int y = UnityEngine.Random.Range(0, length+ 1);
+        int x = UnityEngine.Random.Range(0, length );
+        int y = UnityEngine.Random.Range(0, width);
         return new Vector2Int(x, y);
     }
 

@@ -55,7 +55,7 @@ public class ObstacleSpawner : Spawner
             SetLayerRecursively(instance, layerIndex);
         }
 
-        grid.RefreshPassableTerrain();
+        // grid.RefreshPassableTerrain();
     }
 
     private void SetLayerRecursively(GameObject obj, int layer)
