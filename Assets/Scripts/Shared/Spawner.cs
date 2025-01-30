@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class Spawner : Singleton<Spawner>
 {
     [SerializeField]
-    protected GameObject spaw;
+    protected List<GameObject> items;
     // Start is called before the first frame update
 
 

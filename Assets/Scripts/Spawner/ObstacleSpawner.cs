@@ -16,14 +16,13 @@ public class ObstacleSpawner : Spawner
             return;
         }
 
-        if (spaw == null)
+        if (items == null)
         {
             Debug.LogError("Obstacle prefab is not assigned in the ObstacleSpawner!");
             return;
         }
 
         HashSet<Vector3> usedPositions = grid.GetOcupiedGridHashSet(); // Para evitar posiciones repetidas
-        Debug.Log(usedPositions.Count);
 
         for (int i = 0; i < amount; i++)
         {
@@ -40,11 +39,10 @@ public class ObstacleSpawner : Spawner
                 }
             }
 
-            Debug.Log(usedPositions.Count);
 
-            Debug.Log($"Obstacle {i} Position: {randomPosition}");
+            int rondomItmesIndex = UnityEngine.Random.Range(0, items.Count);
 
-            GameObject instance = Instantiate(spaw, randomPosition, Quaternion.identity);
+            GameObject instance = Instantiate(items[rondomItmesIndex], randomPosition, Quaternion.identity);
             // Asigna la capa al objeto instanciado
             LayerMask obstacleMask = grid.GetObstacleLayer();
             int layerIndex = LayerMask.NameToLayer("Wall");

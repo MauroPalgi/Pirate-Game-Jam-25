@@ -24,13 +24,15 @@ public class EnemyMovement : MonoBehaviour
     private List<PathNode> _playerPath;
     private Transform _player;
 
-    private bool _isFollowingPath = false;
+    private PathNode targetPathNode;
+    private int targetPathIndex = 0;
 
+    private bool _isFollowingPath = false;
 
     private GridPath _patrolPath = null;
 
     [SerializeField]
-    private Enemy _enemyState;
+    private EnemyState _enemyState;
 
     public void SetTargetGrid(TacticGrid tacticGrid)
     {
@@ -64,44 +66,57 @@ public class EnemyMovement : MonoBehaviour
     // Método para iniciar el movimiento por el camino
     public void FollowPath(List<PathNode> path)
     {
+        // Detener cualquier movimiento previo
         StopAllCoroutines(); // Detener cualquier movimiento previo
         StartCoroutine(MoveAlongPath(path));
     }
-
     private IEnumerator MoveAlongPath(List<PathNode> path)
     {
-        for (int i = 0; i < path.Count; i++)
+        Debug.Log($"Path length: {path.Count}");
+        _isFollowingPath = true;
+
+        if (targetPathNode == null)
         {
-            Node node = (Node)path[i];
-            Vector3 targetPosition = _tacticGrid.GetWorldPosition(node.pos_x, node.pos_y);
-
-            // Log para depurar las posiciones objetivo
-            Debug.Log($"Moving to Node {i}: {targetPosition}");
-
-            // Moverse al nodo
-            while (
-                Vector3.Distance(
-                    new Vector3(transform.position.x, 0, transform.position.z),
-                    new Vector3(targetPosition.x, 0, targetPosition.z)
-                ) >= 0.1f
-            ) // Usar un umbral pequeño y descartar la diferencia en Y
-            {
-                transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    targetPosition,
-                    _speed * Time.deltaTime
-                );
-
-                yield return null; // Esperar al siguiente frame
-            }
-            // Camino completado
-            Debug.Log($"Reached Node {i}");
+            targetPathNode = path[targetPathIndex];
         }
-        _isFollowingPath = false;
+        else
+        {
+            targetPathNode = path[targetPathIndex];
 
+        }
+
+
+        Vector3 targetPosition = _tacticGrid.GetWorldPosition(targetPathNode.pos_x, targetPathNode.pos_y);
+        while (Vector3.Distance(
+                        new Vector3(transform.position.x, 0, transform.position.z),  // Ignorar Y
+                        new Vector3(targetPosition.x, 0, targetPosition.z)) >= 0.1f) // Aumentar umbral
+        {
+            Debug.Log($"Moving... Current position: {transform.position}");
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime);
+            yield return null;
+        }
+        Debug.Log($"Reached Node");
+        targetPathIndex++;
+
+        // for (int i = 0; i < path.Count; i++)
+        // {
+        //     PathNode node = path[i];
+
+
+        //     Debug.Log($"Moving to Node {i}: {targetPosition}");
+
+        //     // Esperar hasta alcanzar el nodo
+
+
+        //     node.visited = true;
+
+        //     // Pausa opcional antes de moverse al siguiente nodo
+        //     yield return new WaitForSeconds(0.1f);
+        // }
+
+        _isFollowingPath = false;
         Debug.Log("Path completed");
     }
-
     public float GetDistanceToPlayer()
     {
         return _player != null ? Vector3.Distance(transform.position, _player.position) : -1f;
@@ -144,6 +159,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_playerDetectionController != null && _playerPath == null)
         {
+            Debug.Log("aca");
             Transform player = _playerDetectionController.PlayerTransform;
             Vector2Int worldPos = _tacticGrid.GetGridPosition(transform.position);
             Vector2Int playerWorldPos = _tacticGrid.GetGridPosition(player.position);
@@ -156,13 +172,22 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+
+    public void HandleChaceState()
+    {
+        _enemyState = EnemyState.Chase;
+
+    }
+
     private void Update()
     {
-        if (_playerDetectionController.PlayerDetected)
+        if (_enemyState == EnemyState.Chase)
         {
+            LoadPlayerTranform();
             CalculatePlayerPath();
-            LookAtPlayer();
             MoveTowardsPlayer(_playerPath);
+            LookAtPlayer();
+
         }
     }
     private void LoadPlayerTranform()

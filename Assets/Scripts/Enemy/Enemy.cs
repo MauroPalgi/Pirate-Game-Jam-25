@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 public class Enemy : GridObject
 {
     [SerializeField]
-    private State currentState = State.Idle;
+    private EnemyState currentState = EnemyState.Idle;
 
     // Variables de estado
 
@@ -42,24 +43,24 @@ public class Enemy : GridObject
         {
             switch (currentState)
             {
-                case State.Idle:
+                case EnemyState.Idle:
                     IdleState();
                     break;
-
-                case State.Patrol:
-                    PatrolState();
-                    break;
-
-                case State.Chase:
+                case EnemyState.Chase:
                     ChaseState();
                     break;
 
-                case State.Attack:
-                    AttackState();
+                case EnemyState.Dead:
+                    DeadState();
                     break;
             }
             yield return null;
         }
+    }
+
+    private void DeadState()
+    {
+        Destroy(player);
     }
 
     private void IdleState()
@@ -68,61 +69,31 @@ public class Enemy : GridObject
         if (!isWaiting)
         {
             isWaiting = true;
-            StartCoroutine(WaitThenSwitchState(State.Patrol, 2f)); // Espera 2 segundos
+            StartCoroutine(WaitThenSwitchState(EnemyState.Chase, 2f)); // Espera 2 segundos
         }
     }
 
-    private void PatrolState() { }
 
     private void ChaseState()
     {
-        if (player == null)
-            return;
-
-        // Moverse hacia el jugador
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            player.position,
-            chaseSpeed * Time.deltaTime
-        );
-
-        // Cambiar a estado de ataque si está cerca del jugador
-        if (Vector3.Distance(transform.position, player.position) < attackRange)
-        {
-            SwitchState(State.Attack);
-        }
-        // Regresar a patrulla si el jugador está fuera de rango
-        else if (Vector3.Distance(transform.position, player.position) > chaseRange)
-        {
-            SwitchState(State.Patrol);
-        }
+        enemyMovement.HandleChaceState();
     }
 
-    private void AttackState()
-    {
-        // Realizar el ataque (puedes agregar tu lógica de ataque aquí)
-        Debug.Log("Atacando al jugador");
 
-        // Cambiar a persecución si el jugador se aleja
-        if (Vector3.Distance(transform.position, player.position) > attackRange)
-        {
-            SwitchState(State.Chase);
-        }
-    }
 
-    private void SwitchState(State newState)
+    private void SwitchState(EnemyState newState)
     {
         currentState = newState;
         isWaiting = false;
     }
 
-    private IEnumerator WaitThenSwitchState(State newState, float waitTime)
+    private IEnumerator WaitThenSwitchState(EnemyState newState, float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         SwitchState(newState);
     }
 
-    public State GetCurrentState()
+    public EnemyState GetCurrentState()
     {
         return currentState;
     }
@@ -132,15 +103,14 @@ public class Enemy : GridObject
     {
         UnityEditor.Handles.color = Color.white; // Color del texto
 
-        UnityEditor.Handles.Label(transform.position + Vector3.up * 0.3f, "nodeInformation");
+        UnityEditor.Handles.Label(transform.position + Vector3.up * 0.3f, $"EnemyState: {currentState}");
     }
 }
 
-public enum State
+public enum EnemyState
 {
-    
+
     Idle,
-    Patrol,
     Chase,
-    Attack
+    Dead
 }

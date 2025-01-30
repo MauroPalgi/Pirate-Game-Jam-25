@@ -23,7 +23,7 @@ public class EnemySpawner : Spawner
             return;
         }
 
-        if (spaw == null)
+        if (items == null)
         {
             Debug.LogError("Obstacle prefab is not assigned in the ObstacleSpawner!");
             return;
@@ -51,10 +51,19 @@ public class EnemySpawner : Spawner
 
             Debug.Log($"Obstacle {i} Position: {randomPosition}");
 
-            GameObject instance = Instantiate(spaw, randomPosition, Quaternion.identity);
+            int rondomItmesIndex = UnityEngine.Random.Range(0, items.Count);
+
+            GameObject instance = Instantiate(items[rondomItmesIndex], randomPosition, Quaternion.identity);
             // Asigna la capa al objeto instanciado
-            LayerMask obstacleMask = grid.GetObstacleLayer();
-            int layerIndex = LayerMask.NameToLayer("Wall");
+            int layerIndex = LayerMask.NameToLayer("Enemy");
+            EnemyMovement enemyMovement = instance.GetComponent<EnemyMovement>();
+
+            // Validar que se encontró el componente y asignar el targetGrid
+            if (enemyMovement != null)
+            {
+                enemyMovement.SetTargetGrid(grid);
+            }
+
             instance.layer = layerIndex;
             instance.name = $"Obstacle {i} x: {randomPosition}";
 
