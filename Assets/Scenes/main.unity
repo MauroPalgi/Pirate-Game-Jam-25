@@ -644,7 +644,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.06
+      value: 21.24
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -652,7 +652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.81
+      value: 13.21
       objectReference: {fileID: 0}
     - target: {fileID: 1886620746992726570, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -728,7 +728,7 @@ PrefabInstance:
       objectReference: {fileID: 1863881659}
     - target: {fileID: 8733467818696491216, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
       propertyPath: currentState
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1098,7 +1098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7334890069358357492, guid: 9398b1c28ca82b64186173cb829084aa, type: 3}
       propertyPath: stateTrigger
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7334890069358357492, guid: 9398b1c28ca82b64186173cb829084aa, type: 3}
       propertyPath: items.Array.size
@@ -1108,13 +1108,21 @@ PrefabInstance:
       propertyPath: items.Array.data[0]
       value: 
       objectReference: {fileID: 247145544}
+    - target: {fileID: 7334890069358357492, guid: 9398b1c28ca82b64186173cb829084aa, type: 3}
+      propertyPath: items.Array.data[1]
+      value: 
+      objectReference: {fileID: 247145544}
+    - target: {fileID: 7334890069358357492, guid: 9398b1c28ca82b64186173cb829084aa, type: 3}
+      propertyPath: items.Array.data[2]
+      value: 
+      objectReference: {fileID: 247145544}
     - target: {fileID: 8233413730232199722, guid: 9398b1c28ca82b64186173cb829084aa, type: 3}
       propertyPath: grid
       value: 
       objectReference: {fileID: 1863881659}
     - target: {fileID: 8233413730232199722, guid: 9398b1c28ca82b64186173cb829084aa, type: 3}
       propertyPath: amount
-      value: 23
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8233413730232199722, guid: 9398b1c28ca82b64186173cb829084aa, type: 3}
       propertyPath: stateTrigger
