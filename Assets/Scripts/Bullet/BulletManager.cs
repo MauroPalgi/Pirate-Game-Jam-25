@@ -19,6 +19,7 @@ public class BulletManager : MonoBehaviour
     public string enemyMask;
 
     private Vector3 startingDirection;
+    private Vector3 currentDirection;
     private LineRenderer lineRenderer;
 
     public float bulletSpeed = 0.2f;
@@ -35,6 +36,7 @@ public class BulletManager : MonoBehaviour
 
     void Start(){
         startingDirection = transform.forward;
+        currentDirection = startingDirection;
         audioSource = GetComponent<AudioSource>();
 
         lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -48,7 +50,7 @@ public class BulletManager : MonoBehaviour
         float spriteAngle = Mathf.Atan2(startingDirection.y, startingDirection.x) * Mathf.Rad2Deg;
         bulletSprite.transform.rotation = Quaternion.Euler(0,0,spriteAngle);
         if(controllingBullet == true){
-            Vector3 tempDir = HandleAiming();
+            Vector3 tempDir = HandleAiming(currentDirection);
 
             Vector3 startPos = transform.position;
             Vector3 endPos = startPos + tempDir * 5f;
@@ -67,12 +69,12 @@ public class BulletManager : MonoBehaviour
         }
     }
 
-    Vector3 HandleAiming()
+    Vector3 HandleAiming(Vector3 currentDir)
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         currentAngle += horizontalInput * rotateSpeed * Time.deltaTime;
         currentAngle = Mathf.Clamp(currentAngle, -coneAngle, coneAngle);
-        Vector3 direction = Quaternion.Euler(0, currentAngle, 0) * startingDirection;
+        Vector3 direction = Quaternion.Euler(0, currentAngle, 0) * currentDir;
         return direction;
     }
 
@@ -109,8 +111,9 @@ public class BulletManager : MonoBehaviour
     void HandleCollision(RaycastHit hit){
         
         Vector3 hitNormal = hit.normal;
-        startingDirection = Vector3.Reflect(startingDirection, hitNormal); // Reflect direction
-        
+        Debug.Log($"current DIRECTION: {currentDirection}");
+        currentDirection = hitNormal.normalized; // Reflect direction
+        Debug.Log($"new DIRECTION: {currentDirection}");
         StartCoroutine(EnableAimingAfterHit());
     }
 
