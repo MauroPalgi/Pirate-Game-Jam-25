@@ -60,7 +60,8 @@ public class Enemy : GridObject
 
     private void DeadState()
     {
-        Destroy(player);
+        Debug.Log("dead");
+        Destroy(gameObject);
     }
 
     private void IdleState()
