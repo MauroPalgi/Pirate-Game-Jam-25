@@ -10,11 +10,16 @@ public class EnemySpawner : Spawner
     [SerializeField]
     private TacticGrid grid;
 
+    public static event Action<int> OnEnemySpawnerStart;
+
     protected override void StateChangeEventHandler(GameState state)
     {
         SpawnEnemyRandomGridPosition();
     }
-
+    
+    void Start(){
+        OnEnemySpawnerStart?.Invoke(amount);
+    }
     private void SpawnEnemyRandomGridPosition()
     {
         if (grid == null)
@@ -58,6 +63,8 @@ public class EnemySpawner : Spawner
             int layerIndex = LayerMask.NameToLayer("Enemy");
             EnemyMovement enemyMovement = instance.GetComponent<EnemyMovement>();
 
+
+
             // Validar que se encontró el componente y asignar el targetGrid
             if (enemyMovement != null)
             {
@@ -65,7 +72,7 @@ public class EnemySpawner : Spawner
             }
 
             instance.layer = layerIndex;
-            instance.name = $"Obstacle {i} x: {randomPosition}";
+            instance.name = $"Enemy {i} x: {randomPosition}";
 
             // Asigna la capa a todos los hijos
             SetLayerRecursively(instance, layerIndex);

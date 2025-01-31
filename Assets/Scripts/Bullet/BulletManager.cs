@@ -124,8 +124,10 @@ public class BulletManager : MonoBehaviour
     private IEnumerator DestroyEnemyAfterBulletHit(GameObject enemy){
         yield return new WaitForSeconds(Vector3.Distance(transform.position, hitPoint) / bulletSpeed);
         audioSource.PlayOneShot(hitEnemySound);
-        //DEBUG: Supposed to change its state not destroy
-        Destroy(enemy);
+        Enemy enScript = enemy.GetComponent<Enemy>();
+        if(enScript != null){
+            enScript.SwitchState(EnemyState.Dead);
+        }
     }
 
     private IEnumerator EnableAimingAfterHit(){

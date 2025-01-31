@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Enemy : GridObject
 {
+    public static event Action<int> OnEnemyDead;
     [SerializeField]
     private EnemyState currentState = EnemyState.Idle;
 
@@ -61,7 +62,9 @@ public class Enemy : GridObject
     private void DeadState()
     {
         Debug.Log("dead");
-        Destroy(gameObject);
+        //Change sprite to x
+        //spawn bloodsplatter
+        OnEnemyDead?.Invoke(1);
     }
 
     private void IdleState()
@@ -82,7 +85,7 @@ public class Enemy : GridObject
 
 
 
-    private void SwitchState(EnemyState newState)
+    public void SwitchState(EnemyState newState)
     {
         currentState = newState;
         isWaiting = false;

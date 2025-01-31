@@ -24,7 +24,6 @@ public class GameManager : Singleton<GameManager>
             case GameState.SpawningEnemies:
                 break;
             case GameState.SpawningObstacle:
-                HandleSpawnObtacles();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
@@ -32,17 +31,10 @@ public class GameManager : Singleton<GameManager>
         OnGameStateChanged?.Invoke(newState);
     }
 
-    private void HandleSpawnObtacles()
-    {
-        // Debug.Log("handle spawning");
-    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            ChangeState(GameState.SpawningObstacle);
-        }
+
     }
 }
 
