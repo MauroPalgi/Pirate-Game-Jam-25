@@ -145,7 +145,6 @@ public class SimpleGrid : MonoBehaviour
                     Gizmos.color = grid[x, y].passable ? Color.green : Color.red;
                     if (showGizmoLabel)
                     {
-                        UnityEditor.Handles.color = Color.white; // Color del texto
                         string nodeInformation =
                             "isP: "
                             + grid[x, y].passable
@@ -160,7 +159,6 @@ public class SimpleGrid : MonoBehaviour
                             + x
                             + " - g y: "
                             + y;
-                        UnityEditor.Handles.Label(pos + Vector3.up * 0.3f, nodeInformation);
                     }
                     Gizmos.DrawCube(pos, Vector3.one * cellSize * 0.1f);
                 }

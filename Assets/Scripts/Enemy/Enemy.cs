@@ -102,9 +102,6 @@ public class Enemy : GridObject
 
     private void OnDrawGizmos()
     {
-        UnityEditor.Handles.color = Color.white; // Color del texto
-
-        UnityEditor.Handles.Label(transform.position + Vector3.up * 0.3f, $"EnemyState: {currentState}");
     }
 }
 

@@ -4,7 +4,9 @@ using DG.Tweening;
 using UnityEngine;
 
 public class BulletManager : MonoBehaviour
-{
+{   
+    public GameObject playerObject;
+
     //cheeky sound to play when hitting a wall
     private AudioSource audioSource;
     public AudioClip ricochetSound;

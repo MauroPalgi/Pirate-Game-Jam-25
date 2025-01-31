@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
         switch (newState)
         {
             case GameState.Starting:
+                StartingState();
                 break;
             case GameState.SpawningGrid:
                 break;
@@ -31,11 +32,13 @@ public class GameManager : Singleton<GameManager>
         OnGameStateChanged?.Invoke(newState);
     }
 
-
-    private void Update()
-    {
-
+    void StartingState(){
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject bullet = GameObject.FindGameObjectWithTag("Bullet");
+        player.transform.position = new Vector3(UnityEngine.Random.Range(5,66),2.6f,2f);
+        bullet.transform.position = player.transform.position;
     }
+
 }
 
 public enum GameState
