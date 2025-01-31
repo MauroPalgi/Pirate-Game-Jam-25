@@ -106,7 +106,6 @@ public class BulletManager : MonoBehaviour
         }
         // Move the bullet visually to the hit point
         float travelTime = Vector3.Distance(origin, hitPoint) / bulletSpeed;
-        bulletSprite.transform.DOScaleX(bulletSize, 0f); // Stretch bullet slightly
         transform.DOMove(hitPoint, travelTime).SetEase(Ease.Linear).OnComplete(() =>{transform.position = hitPoint;});
     }
 

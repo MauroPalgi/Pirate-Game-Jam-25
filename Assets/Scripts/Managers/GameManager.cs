@@ -25,6 +25,8 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.SpawningObstacle:
                 break;
+            case GameState.RestartSpawners:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
@@ -48,4 +50,5 @@ public enum GameState
     SpawningPlayer,
     SpawningEnemies,
     SpawningObstacle,
+    RestartSpawners,
 }

@@ -761,7 +761,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1517718582
 Transform:
   m_ObjectHideFlags: 0
@@ -771,7 +771,7 @@ Transform:
   m_GameObject: {fileID: 1517718581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -43.2, y: 90.1, z: 0}
+  m_LocalPosition: {x: -43.2, y: 90, z: 0}
   m_LocalScale: {x: 24.685905, y: 1, z: 31.12057}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -995,6 +995,17 @@ MonoBehaviour:
   gameManager: {fileID: 6654702237608729470}
   currentLevel: 0
   enemiesKilled: 0
+  textures:
+  - {fileID: 2800000, guid: a91fbf5eca85a7841a3c2fcbd42f91a8, type: 3}
+  - {fileID: 2800000, guid: 06c7d0c8d23e6304ba2473c64205047f, type: 3}
+  - {fileID: 2800000, guid: e6d817a69959d974d8ca547e5f78c222, type: 3}
+  - {fileID: 2800000, guid: 8ded47f6211e0dc439ec11f50e58db40, type: 3}
+  - {fileID: 2800000, guid: a7c43ae16d3fecd438947bb5071f5d7c, type: 3}
+  - {fileID: 2800000, guid: 3c8417ad5debf484ebd41338b0141021, type: 3}
+  - {fileID: 2800000, guid: 502c5acffde769345ab10b3a5f929ed4, type: 3}
+  - {fileID: 2800000, guid: 79235ec6c45fd694f83603b191bc5406, type: 3}
+  backgroundGame: {fileID: 1517718581}
+  bgMaterial: {fileID: 0}
 --- !u!1 &1940151647
 GameObject:
   m_ObjectHideFlags: 3
@@ -2366,9 +2377,9 @@ MonoBehaviour:
   enemyMask: Enemy
   bulletSpeed: 300
   bulletSize: 0.1
-  coneAngle: 45
+  coneAngle: 70
   controllingBullet: 1
-  rotateSpeed: 100
+  rotateSpeed: 140
   numberOfRicochets: 0
 --- !u!1 &4361710834426781098
 GameObject:
@@ -2583,7 +2594,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5680519943761570336
 Transform:
   m_ObjectHideFlags: 0
@@ -2796,7 +2807,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &6654702237608729470
 MonoBehaviour:
   m_ObjectHideFlags: 0
