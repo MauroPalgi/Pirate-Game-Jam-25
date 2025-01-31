@@ -26,6 +26,9 @@ public class TacticGrid : MonoBehaviour
     [SerializeField]
     bool showGizmoLabel;
 
+    [SerializeField]
+    float YAxis = 0.1f;
+
     private List<Vector3> _pathToDraw = null;
 
     public void SetPathToDraw(List<Vector3> path)
@@ -73,7 +76,7 @@ public class TacticGrid : MonoBehaviour
     private void CalculateNodeElevation(Node node)
     {
         // Origen del rayo
-        Vector3 rayOrigin = GetWorldPosition(node.pos_x, node.pos_y) + Vector3.up * 10f;
+        Vector3 rayOrigin = GetWorldPosition(node.pos_x, node.pos_y) + Vector3.up * 30f;
 
         // Dirección del rayo
         Vector3 rayDirection = Vector3.down;
@@ -81,12 +84,12 @@ public class TacticGrid : MonoBehaviour
 
         // Realizar el raycast
         if (
-            Physics.Raycast(ray, out RaycastHit hit, 20f, terrainLayer)
+            Physics.Raycast(ray, out RaycastHit hit, 10f, terrainLayer)
             || Physics.Raycast(ray, out hit, 20f, obstacleLayer)
         )
         {
             // Asignar la elevación al nodo
-            node.elevation = hit.point.y;
+            node.elevation = hit.point.y * 10f;
 
             // Opcional: Dibujar un punto donde el raycast golpea
             Debug.DrawLine(hit.point, hit.point + Vector3.up * 0.5f, Color.green, 2f);
@@ -205,7 +208,7 @@ public class TacticGrid : MonoBehaviour
     {
         Vector3 worldPosition = new Vector3(
             x * cellSize,
-            elevation == true ? grid[x, y].elevation : 0f,
+            YAxis,
             y * cellSize
         );
         // + transform.position;
@@ -292,7 +295,7 @@ public class TacticGrid : MonoBehaviour
     {
         int x = UnityEngine.Random.Range(0, length);
         int y = UnityEngine.Random.Range(0, width);
-        return GetWorldPosition(x, y);
+        return GetWorldPosition(x, y, true);
     }
 
     public Vector2Int GetRandomPosition()

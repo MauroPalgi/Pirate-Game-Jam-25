@@ -10,26 +10,25 @@ public class PlayerDetection : MonoBehaviour
     public Vector2 DirectionToPlayer { get; private set; }
 
     [SerializeField]
-    public GameObject Player;
+    public GameObject playerObject;
 
-    public Transform PlayerTransform { get; private set; }
 
     [SerializeField]
     private float PlayerDetectionDistance;
 
-    private Transform _player;
+    private Transform _playerTransform;
 
     void Awake()
     {
-        PlayerTransform = Player.transform;
-        _player = PlayerTransform;
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+        _playerTransform = playerObject.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Vector entre el enemigo y el jugador
-        Vector3 enemyToPlayerVector = _player.position - transform.position;
+        Vector3 enemyToPlayerVector = _playerTransform.position - transform.position;
 
         // Dirección hacia el jugador normalizada
         DirectionToPlayer = enemyToPlayerVector.normalized;
@@ -37,5 +36,10 @@ public class PlayerDetection : MonoBehaviour
         // Detectar si el jugador está dentro del rango (usando sqrMagnitude para eficiencia)
         PlayerDetected =
             enemyToPlayerVector.sqrMagnitude <= PlayerDetectionDistance * PlayerDetectionDistance;
+    }
+
+    public Transform GetPlayerTransform()
+    {
+        return _playerTransform;
     }
 }

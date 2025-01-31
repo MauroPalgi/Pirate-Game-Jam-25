@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObstacleSpawner : Spawner
 {
     [SerializeField]
-    private TacticGrid grid;
+    private TacticGrid grid;    
 
     private void SpawnObstacleRandomGridPosition()
     {

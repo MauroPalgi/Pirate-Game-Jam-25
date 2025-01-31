@@ -74,19 +74,8 @@ public class EnemyMovement : MonoBehaviour
     {
         Debug.Log($"Path length: {path.Count}");
         _isFollowingPath = true;
-
-        if (targetPathNode == null)
-        {
-            targetPathNode = path[targetPathIndex];
-        }
-        else
-        {
-            targetPathNode = path[targetPathIndex];
-
-        }
-
-
-        Vector3 targetPosition = _tacticGrid.GetWorldPosition(targetPathNode.pos_x, targetPathNode.pos_y);
+        targetPathNode = path[targetPathIndex];
+        Vector3 targetPosition = _tacticGrid.GetWorldPosition(targetPathNode.pos_x, targetPathNode.pos_y, true);
         while (Vector3.Distance(
                         new Vector3(transform.position.x, 0, transform.position.z),  // Ignorar Y
                         new Vector3(targetPosition.x, 0, targetPosition.z)) >= 0.1f) // Aumentar umbral
@@ -97,23 +86,6 @@ public class EnemyMovement : MonoBehaviour
         }
         Debug.Log($"Reached Node");
         targetPathIndex++;
-
-        // for (int i = 0; i < path.Count; i++)
-        // {
-        //     PathNode node = path[i];
-
-
-        //     Debug.Log($"Moving to Node {i}: {targetPosition}");
-
-        //     // Esperar hasta alcanzar el nodo
-
-
-        //     node.visited = true;
-
-        //     // Pausa opcional antes de moverse al siguiente nodo
-        //     yield return new WaitForSeconds(0.1f);
-        // }
-
         _isFollowingPath = false;
         Debug.Log("Path completed");
     }
@@ -159,8 +131,8 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_playerDetectionController != null && _playerPath == null)
         {
-            Debug.Log("aca");
-            Transform player = _playerDetectionController.PlayerTransform;
+            Transform player = _playerDetectionController.GetPlayerTransform();
+            Debug.Log(player);
             Vector2Int worldPos = _tacticGrid.GetGridPosition(transform.position);
             Vector2Int playerWorldPos = _tacticGrid.GetGridPosition(player.position);
             _playerPath = _pathFinder.FindPath(
@@ -194,7 +166,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_playerDetectionController != null)
         {
-            _player = _playerDetectionController.PlayerTransform;
+            _player = _playerDetectionController.GetPlayerTransform();
         }
     }
 }

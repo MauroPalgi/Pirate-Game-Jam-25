@@ -63,7 +63,7 @@ public class EnemySpawner : Spawner
             int layerIndex = LayerMask.NameToLayer("Enemy");
             EnemyMovement enemyMovement = instance.GetComponent<EnemyMovement>();
 
-
+            
 
             // Validar que se encontró el componente y asignar el targetGrid
             if (enemyMovement != null)
