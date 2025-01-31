@@ -14,7 +14,9 @@ public class EnemySpawner : Spawner
 
     protected override void StateChangeEventHandler(GameState state)
     {
+        Debug.Log($"estado {state}");
         if(state == GameState.RestartSpawners){
+            Debug.Log($"HOLAAAAAA");
             DestroyAllEnemies();
             SpawnEnemyRandomGridPosition();
         }else{

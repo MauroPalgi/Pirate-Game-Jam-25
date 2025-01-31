@@ -12,13 +12,11 @@ public class LevelManager : MonoBehaviour
     public List<Texture2D> textures = new List<Texture2D>();
     
     public GameObject backgroundGame;
-    private Material bgMaterial;
-    private Renderer objRenderer;
+    public Material bgMaterial;
     private Vector3 backgroundGamePos;
 
     void Start(){
-        objRenderer = backgroundGame.GetComponent<Renderer>();
-        bgMaterial = objRenderer.GetComponent<Material>();
+
         backgroundGamePos = backgroundGame.transform.position;
     }
 
@@ -26,8 +24,8 @@ public class LevelManager : MonoBehaviour
     void ChangeLevel(){
         GameManager.Instance.ChangeState(GameState.RestartSpawners);
         bgMaterial.mainTexture = textures[Random.Range(0,textures.Count)];
-        backgroundGame.transform.DOMove(new Vector3(backgroundGamePos.x,112,backgroundGamePos.z), 0.1f).OnComplete(() => 
-        backgroundGame.transform.DOMove(new Vector3(backgroundGamePos.x,90,backgroundGamePos.z), 0.1f));
+        backgroundGame.transform.DOMove(new Vector3(backgroundGamePos.x,backgroundGamePos.y + 22,backgroundGamePos.z), 0.3f).OnComplete(() => 
+        backgroundGame.transform.DOMove(new Vector3(backgroundGamePos.x,backgroundGamePos.y - 22,backgroundGamePos.z), 0.3f));
 
     }
 

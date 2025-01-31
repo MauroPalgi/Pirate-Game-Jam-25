@@ -30,7 +30,8 @@ public abstract class Spawner : Singleton<Spawner>
 
     private void HandleOnGameStateChanged(GameState state)
     {
-        if (state == stateTrigger)
+        Debug.Log(state);
+        if (state == stateTrigger || state == GameState.RestartSpawners)
         {
             StateChangeEventHandler(state);
         }
