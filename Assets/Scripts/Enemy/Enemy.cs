@@ -62,6 +62,7 @@ public class Enemy : GridObject
         //Change sprite to x
         //spawn bloodsplatter
         OnEnemyDead?.Invoke(1);
+        Destroy(gameObject);
     }
 
     private void IdleState()
