@@ -12,9 +12,6 @@ public class Enemy : GridObject
     // Variables de estado
 
     [SerializeField]
-    private Transform player;
-
-    [SerializeField]
     private float chaseRange = 10f;
 
     [SerializeField]

@@ -291,8 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetGrid: {fileID: 0}
   positionOnGrid: {x: 0, y: 0}
-  currentState: 0
-  player: {fileID: 1886620746992726570}
+  currentState: 1
   chaseRange: 10
   attackRange: 2
   patrolSpeed: 2
@@ -309,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7747a524ca383a4e856e19e6ef6061d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
+  playerObject: {fileID: 0}
   PlayerDetectionDistance: 0
 --- !u!114 &2951347281092504181
 MonoBehaviour:
