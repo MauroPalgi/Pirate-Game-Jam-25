@@ -14,10 +14,12 @@ public class EnemySpawner : Spawner
 
     protected override void StateChangeEventHandler(GameState state)
     {
+        DestroyAllEnemies();
         SpawnEnemyRandomGridPosition();
     }
-    
-    void Start(){
+
+    void Start()
+    {
         OnEnemySpawnerStart?.Invoke(amount);
     }
     private void SpawnEnemyRandomGridPosition()
@@ -56,16 +58,29 @@ public class EnemySpawner : Spawner
 
             Debug.Log($"Obstacle {i} Position: {randomPosition}");
 
-            int rondomItmesIndex = UnityEngine.Random.Range(0, items.Count);
+            GameObject enemiesParent = GameObject.Find("Enemies");
+            if (enemiesParent == null)
+            {
+                enemiesParent = new GameObject("Enemies"); // Si no existe, lo creamos
+            }
 
-            GameObject instance = Instantiate(items[rondomItmesIndex], randomPosition, Quaternion.identity);
+            Debug.Log(usedPositions.Count);
+            Debug.Log($"Obstacle {i} Position: {randomPosition}");
+
+            int randomItemsIndex = UnityEngine.Random.Range(0, items.Count);
+
+            GameObject instance = Instantiate(items[randomItemsIndex], randomPosition, Quaternion.identity);
+
             // Asigna la capa al objeto instanciado
             int layerIndex = LayerMask.NameToLayer("Enemy");
+            instance.layer = layerIndex;
+            instance.name = $"Enemy {i} x: {randomPosition}";
+
+            // Hacer que el enemigo sea hijo del GameObject "Enemies"
+            instance.transform.SetParent(enemiesParent.transform);
+
+            // Obtener el script de movimiento y asignar la grilla
             EnemyMovement enemyMovement = instance.GetComponent<EnemyMovement>();
-
-            
-
-            // Validar que se encontró el componente y asignar el targetGrid
             if (enemyMovement != null)
             {
                 enemyMovement.SetTargetGrid(grid);
@@ -80,6 +95,23 @@ public class EnemySpawner : Spawner
 
         // grid.RefreshPassableTerrain();
     }
+
+
+    public void DestroyAllEnemies()
+    {
+        GameObject enemiesParent = GameObject.Find("Enemies");
+
+        if (enemiesParent != null)
+        {
+            Destroy(enemiesParent);
+            Debug.Log("Todos los enemigos han sido eliminados.");
+        }
+        else
+        {
+            Debug.Log("No hay enemigos para eliminar.");
+        }
+    }
+
 
     private void SetLayerRecursively(GameObject obj, int layer)
     {

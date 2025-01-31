@@ -68,7 +68,11 @@ public class EnemyMovement : MonoBehaviour
     {
         // Detener cualquier movimiento previo
         StopAllCoroutines(); // Detener cualquier movimiento previo
-        StartCoroutine(MoveAlongPath(path));
+        if (targetPathIndex - 1 < path.Count)
+        {
+            StartCoroutine(MoveAlongPath(path));
+
+        }
     }
     private IEnumerator MoveAlongPath(List<PathNode> path)
     {
