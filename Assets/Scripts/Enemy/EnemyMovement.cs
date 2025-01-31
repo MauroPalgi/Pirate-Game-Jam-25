@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+
+    public static event Action<bool> OnPlayerReachead;
+
     [SerializeField]
     private float _speed;
 
@@ -68,10 +71,14 @@ public class EnemyMovement : MonoBehaviour
     {
         // Detener cualquier movimiento previo
         StopAllCoroutines(); // Detener cualquier movimiento previo
-        if (targetPathIndex - 1 < path.Count)
+        if (targetPathIndex < path.Count - 1)
         {
             StartCoroutine(MoveAlongPath(path));
 
+        }
+        else
+        {
+            OnPlayerReachead.Invoke(true);
         }
     }
     private IEnumerator MoveAlongPath(List<PathNode> path)

@@ -104,6 +104,24 @@ public class Enemy : GridObject
     private void OnDrawGizmos()
     {
     }
+
+
+    protected void Awake()
+    {
+        EnemyMovement.OnPlayerReachead += HandlePlayerReach;
+
+    }
+
+    private void HandlePlayerReach(bool reach)
+    {
+        SwitchState(EnemyState.Idle);
+    }
+
+    private void OnDestroy()
+    {
+        EnemyMovement.OnPlayerReachead -= HandlePlayerReach;
+
+    }
 }
 
 public enum EnemyState
