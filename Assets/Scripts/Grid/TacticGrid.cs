@@ -26,6 +26,9 @@ public class TacticGrid : MonoBehaviour
     [SerializeField]
     bool showGizmoLabel;
 
+    [SerializeField]
+    float YAxis = 0.1f;
+
     private List<Vector3> _pathToDraw = null;
 
     public void SetPathToDraw(List<Vector3> path)
@@ -205,7 +208,7 @@ public class TacticGrid : MonoBehaviour
     {
         Vector3 worldPosition = new Vector3(
             x * cellSize,
-            elevation == true ? grid[x, y].elevation : 0f,
+            YAxis,
             y * cellSize
         );
         // + transform.position;
@@ -292,7 +295,7 @@ public class TacticGrid : MonoBehaviour
     {
         int x = UnityEngine.Random.Range(0, length);
         int y = UnityEngine.Random.Range(0, width);
-        return GetWorldPosition(x, y);
+        return GetWorldPosition(x, y, true);
     }
 
     public Vector2Int GetRandomPosition()
