@@ -8,7 +8,6 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     public GameState State { get; private set; }
     public static event Action<GameState> OnGameStateChanged;
-    void Start() => ChangeState(GameState.Starting);
 
     public void ChangeState(GameState newState)
     {

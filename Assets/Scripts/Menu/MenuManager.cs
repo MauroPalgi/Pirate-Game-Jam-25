@@ -47,7 +47,7 @@ public class MenuManager : MonoBehaviour
     public void StartGame(){
 
         //after .3f start the game
-        //GameManager.ChangeState(GameState.Starting);
+        GameManager.Instance.ChangeState(GameState.Starting);
     }
 
 
