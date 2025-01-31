@@ -33,9 +33,10 @@ public class GameManager : Singleton<GameManager>
 
     void StartingState(){
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject bulletSpawn = GameObject.FindGameObjectWithTag("bulletSpawn");
         GameObject bullet = GameObject.FindGameObjectWithTag("Bullet");
         player.transform.position = new Vector3(UnityEngine.Random.Range(5,66),2.6f,2f);
-        bullet.transform.position = player.transform.position;
+        bullet.transform.position = bulletSpawn.transform.position;
     }
 
 }

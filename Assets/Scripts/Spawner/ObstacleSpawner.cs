@@ -31,7 +31,7 @@ public class ObstacleSpawner : Spawner
             Vector3 randomPosition = new Vector3();
             while (!positionAdded)
             {
-                randomPosition = grid.GetRandomGridWorldPosition();
+                randomPosition = grid.GetRandomGridWorldPosition() + new Vector3(0,2,0);
                 if (!usedPositions.Contains(randomPosition))
                 {
                     usedPositions.Add(randomPosition);
