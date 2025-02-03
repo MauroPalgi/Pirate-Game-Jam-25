@@ -27,7 +27,11 @@ jobs:
       - name: Install Butler
         run: |
           echo "Descargando Butler..."
-          curl -L -o ~/butler.zip https://broth.itch.ovh/butler/linux-amd64/archive/default.zip && echo "Descarga completada." || echo "Error en la descarga."
+          curl -L https://broth.itch.ovh/butler/linux-amd64/archive/default.zip -o ~/butler.zip --verbose && echo "Descarga completada." || echo "Error en la descarga."
+          echo "Leer Butler..."
+          cat ~/butler.zip
+          echo "File Butler..."
+          file ~/butler.zip
           echo "Extrayendo Butler..."
           unzip ~/butler.zip -d ~/ && echo "Extracción completada." || echo "Error al extraer."
           echo "Dando permisos de ejecución..." 
