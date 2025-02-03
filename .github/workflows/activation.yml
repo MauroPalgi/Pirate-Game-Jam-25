@@ -23,11 +23,10 @@ jobs:
 
       - name: Install Butler
         run: |
-          mkdir -p ~/.itch
-          curl -L -o ~/.itch/butler.zip https://broth.itch.ovh/butler/linux-amd64/archive/default.zip
-          unzip ~/.itch/butler.zip -d ~/.itch/
-          chmod +x ~/.itch/butler
-          sudo mv ~/.itch/butler /usr/local/bin/butler
+          curl -L -o ~/butler.zip https://broth.itch.ovh/butler/linux-amd64/archive/default.zip
+          unzip ~/butler.zip -d ~/
+          chmod +x ~/butler
+          sudo mv ~/butler /usr/local/bin/butler
 
       - name: Check Butler Version
         run: butler -v
