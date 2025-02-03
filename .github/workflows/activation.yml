@@ -1,18 +1,32 @@
-name: Get Unity license activation file 🔐
+name: Upload Local Build to Itch.io
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - main  # Solo se ejecuta cuando haces push a main (cámbialo si es necesario)
 
 jobs:
-  requestManualActivationFile:
-    name: Request manual activation file 🔑
-    runs-on: ubuntu-latest
+  upload:
+    name: Upload Local Build to Itch.io
+    runs-on: ubuntu-latest  # También puedes usar windows-latest o macos-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: webbertakken/unity-request-manual-activation-file@v2
-        id: getManualLicenseFile
+      - name: Compress Build
+        run: |
+          zip -r build.zip build/  # Asegúrate de que "build/" tiene el juego exportado localmente
 
-      - uses: actions/upload-artifact@v4  # ✅ Actualizado a v4
-        with:
-          name: Manual Activation File
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+      - name: Install Butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/latest
+          unzip butler.zip
+          chmod +x butler
+          sudo mv butler /usr/local/bin/
+
+      - name: Upload to Itch.io
+        run: |
+          butler push build.zip your-itch-username/your-game:html5
+        env:
+          BUTLER_API_KEY: ${{ secrets.ITCHIO_API_KEY }}
