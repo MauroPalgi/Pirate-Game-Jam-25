@@ -16,7 +16,7 @@ jobs:
 
       - name: Compress Build
         run: |
-          zip -r build.zip build/  # Asegúrate de que "build/" tiene el juego exportado localmente
+          zip -r build.zip release/  # Asegúrate de que "build/" tiene el juego exportado localmente
 
       - name: Install Butler
         run: |
