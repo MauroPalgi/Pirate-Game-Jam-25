@@ -17,7 +17,10 @@ jobs:
       - name: Compress Build
         run: |
           zip -r build.zip release/  # Asegúrate de que "build/" tiene el juego exportado localmente
-
+          
+      - name: Remove existing Butler
+        run: rm -f /usr/local/bin/butler ~/.itch/butler
+  
       - name: Install Butler
         run: |
           mkdir -p ~/.itch
