@@ -20,16 +20,20 @@ jobs:
 
       - name: Remove existing Butler
         run: rm -f /usr/local/bin/butler ~/.itch/butler
-        
+
       - name: Check Unzip Version
         run: unzip -v
 
       - name: Install Butler
         run: |
-          curl -L -o ~/butler.zip https://broth.itch.ovh/butler/linux-amd64/archive/default.zip
-          unzip ~/butler.zip -d ~/
-          chmod +x ~/butler
-          sudo mv ~/butler /usr/local/bin/butler
+          echo "Descargando Butler..."
+          curl -L -o ~/butler.zip https://broth.itch.ovh/butler/linux-amd64/archive/default.zip && echo "Descarga completada." || echo "Error en la descarga."
+          echo "Extrayendo Butler..."
+          unzip ~/butler.zip -d ~/ && echo "Extracción completada." || echo "Error al extraer."
+          echo "Dando permisos de ejecución..." 
+          chmod +x ~/butler && echo "Permisos aplicados." || echo "Error al aplicar permisos."
+          echo "Moviendo Butler a /usr/local/bin/..."
+          sudo mv ~/butler /usr/local/bin/butler && echo "Movimiento completado." || echo "Error al mover el archivo."
 
       - name: Check Butler Version
         run: butler -v
