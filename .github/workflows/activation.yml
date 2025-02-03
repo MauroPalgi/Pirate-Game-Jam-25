@@ -20,6 +20,9 @@ jobs:
 
       - name: Remove existing Butler
         run: rm -f /usr/local/bin/butler ~/.itch/butler
+        
+      - name: Check Unzip Version
+        run: unzip -v
 
       - name: Install Butler
         run: |
