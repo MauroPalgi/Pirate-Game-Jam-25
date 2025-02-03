@@ -24,7 +24,8 @@ jobs:
       - name: Install Butler
         run: |
           mkdir -p ~/.itch
-          curl -L -o ~/.itch/butler https://broth.itch.ovh/butler/linux-amd64/head/butler
+          curl -L -o ~/.itch/butler.zip https://broth.itch.ovh/butler/linux-amd64/archive/default.zip
+          unzip ~/.itch/butler.zip -d ~/.itch/
           chmod +x ~/.itch/butler
           sudo mv ~/.itch/butler /usr/local/bin/butler
 
