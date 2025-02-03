@@ -42,7 +42,7 @@ jobs:
       - name: Check Butler Version
         run: butler -v
 
-      - name: Upload to Itch.io 
+      - name: Upload to Itch.io |
         run: |
           butler push build.zip windestroy/bullet-path:html5
         env:
