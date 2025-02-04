@@ -83,7 +83,7 @@ public class EnemyMovement : MonoBehaviour
     }
     private IEnumerator MoveAlongPath(List<PathNode> path)
     {
-        Debug.Log($"Path length: {path.Count}");
+
         _isFollowingPath = true;
         targetPathNode = path[targetPathIndex];
         Vector3 targetPosition = _tacticGrid.GetWorldPosition(targetPathNode.pos_x, targetPathNode.pos_y, true);
@@ -91,14 +91,14 @@ public class EnemyMovement : MonoBehaviour
                         new Vector3(transform.position.x, 0, transform.position.z),  // Ignorar Y
                         new Vector3(targetPosition.x, 0, targetPosition.z)) >= 0.1f) // Aumentar umbral
         {
-            Debug.Log($"Moving... Current position: {transform.position}");
+
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime);
             yield return null;
         }
-        Debug.Log($"Reached Node");
+
         targetPathIndex++;
         _isFollowingPath = false;
-        Debug.Log("Path completed");
+
     }
     public float GetDistanceToPlayer()
     {
@@ -143,7 +143,7 @@ public class EnemyMovement : MonoBehaviour
         if (_playerDetectionController != null && _playerPath == null)
         {
             Transform player = _playerDetectionController.GetPlayerTransform();
-            Debug.Log(player);
+
             Vector2Int worldPos = _tacticGrid.GetGridPosition(transform.position);
             Vector2Int playerWorldPos = _tacticGrid.GetGridPosition(player.position);
             _playerPath = _pathFinder.FindPath(

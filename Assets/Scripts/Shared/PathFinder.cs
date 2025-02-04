@@ -95,7 +95,7 @@ public class PathFinder : MonoBehaviour
 
     private IEnumerable<PathNode> GetNeighbours(PathNode node)
     {
-        // Debug.Log("Nodo" + node.ToString());
+        //  
         List<PathNode> neighbours = new List<PathNode>();
         for (int x = -1; x <= 1; x++)
         {

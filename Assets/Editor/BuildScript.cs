@@ -40,22 +40,22 @@ public class BuildScript
         {
             File.AppendAllText(logFile, "✅ Build exitoso!\n");
             File.AppendAllText(logFile, "📁 Creado en el  directorio: " + buildPath + "\n");
-            Debug.Log("✅ Build exitoso!");
+
         }
         else if (summary.result == BuildResult.Failed)
         {
             File.AppendAllText(logFile, "❌ Error en el build! Revise la consola.\n");
-            Debug.LogError("❌ Error en el build!");
+
         }
         else if (summary.result == BuildResult.Cancelled)
         {
             File.AppendAllText(logFile, "⚠️ Build cancelado!\n");
-            Debug.LogWarning("⚠️ Build cancelado!");
+
         }
         else if (summary.result == BuildResult.Unknown)
         {
             File.AppendAllText(logFile, "❓ Resultado desconocido del build.\n");
-            Debug.LogWarning("❓ Resultado desconocido del build.");
+
         }
     }
 }

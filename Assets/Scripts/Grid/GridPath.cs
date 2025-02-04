@@ -27,7 +27,7 @@ public class GridPath
     {
         for (int i = 0; i < _nodes.Count; i++)
         {
-            Debug.Log(_nodes[i].ToString());
+
         }
     }
 }

@@ -12,42 +12,37 @@ public class EnemySpawner : Spawner
 
     public static event Action<int> OnEnemySpawnerStart;
 
-    protected override void StateChangeEventHandler(GameState state)
+    public List<GameObject> enemiesObject = null;
+
+    public int enemyAmount = 0;
+
+    private void Update()
     {
-        Debug.Log($"estado {state}");
-        if(state == GameState.RestartSpawners){
-            Debug.Log($"HOLAAAAAA");
-            DestroyAllEnemies();
-            SpawnEnemyRandomGridPosition();
-        }else{
-            SpawnEnemyRandomGridPosition();
+        if (enemiesObject != null)
+        {
+            enemyAmount = enemiesObject.Count();
         }
     }
 
-    void Start()
-    {
-        OnEnemySpawnerStart?.Invoke(amount);
-    }
     private void SpawnEnemyRandomGridPosition()
     {
         if (grid == null)
         {
-            Debug.LogError("Grid is not assigned in the ObstacleSpawner!");
+
             return;
         }
 
         if (items == null)
         {
-            Debug.LogError("Obstacle prefab is not assigned in the ObstacleSpawner!");
+
             return;
         }
 
         HashSet<Vector3> usedPositions = grid.GetOcupiedGridHashSet(); // Para evitar posiciones repetidas
-        Debug.Log(usedPositions.Count);
+
 
         for (int i = 0; i < amount; i++)
         {
-
             bool positionAdded = false;
             Vector3 randomPosition = new Vector3();
             while (!positionAdded)
@@ -60,9 +55,9 @@ public class EnemySpawner : Spawner
                 }
             }
 
-            Debug.Log(usedPositions.Count);
 
-            Debug.Log($"Obstacle {i} Position: {randomPosition}");
+
+
 
             GameObject enemiesParent = GameObject.Find("Enemies");
             if (enemiesParent == null)
@@ -70,12 +65,18 @@ public class EnemySpawner : Spawner
                 enemiesParent = new GameObject("Enemies"); // Si no existe, lo creamos
             }
 
-            Debug.Log(usedPositions.Count);
-            Debug.Log($"Obstacle {i} Position: {randomPosition}");
+
+
 
             int randomItemsIndex = UnityEngine.Random.Range(0, items.Count);
 
-            GameObject instance = Instantiate(items[randomItemsIndex], randomPosition, Quaternion.identity);
+            GameObject instance = Instantiate(
+                items[randomItemsIndex],
+                randomPosition,
+                Quaternion.identity
+            );
+
+            enemiesObject.Add(instance);
 
             // Asigna la capa al objeto instanciado
             int layerIndex = LayerMask.NameToLayer("Enemy");
@@ -102,7 +103,6 @@ public class EnemySpawner : Spawner
         // grid.RefreshPassableTerrain();
     }
 
-
     public void DestroyAllEnemies()
     {
         GameObject enemiesParent = GameObject.Find("Enemies");
@@ -110,14 +110,13 @@ public class EnemySpawner : Spawner
         if (enemiesParent != null)
         {
             Destroy(enemiesParent);
-            Debug.Log("Todos los enemigos han sido eliminados.");
+
         }
         else
         {
-            Debug.Log("No hay enemigos para eliminar.");
+
         }
     }
-
 
     private void SetLayerRecursively(GameObject obj, int layer)
     {
@@ -126,6 +125,21 @@ public class EnemySpawner : Spawner
         foreach (Transform child in obj.transform)
         {
             SetLayerRecursively(child.gameObject, layer);
+        }
+    }
+
+    protected override void StateChangeEventHandler(GameState state)
+    {
+
+        if (state == GameState.RestartSpawners)
+        {
+
+            DestroyAllEnemies();
+            SpawnEnemyRandomGridPosition();
+        }
+        else
+        {
+            SpawnEnemyRandomGridPosition();
         }
     }
 }

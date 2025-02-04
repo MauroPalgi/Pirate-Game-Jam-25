@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 
 public class BulletManager : MonoBehaviour
-{   
+{
     public GameObject playerObject;
 
     //cheeky sound to play when hitting a wall
@@ -36,7 +36,8 @@ public class BulletManager : MonoBehaviour
     private Vector3 hitPoint;
 
 
-    void Start(){
+    void Start()
+    {
         startingDirection = transform.forward;
         currentDirection = startingDirection;
         audioSource = GetComponent<AudioSource>();
@@ -48,10 +49,12 @@ public class BulletManager : MonoBehaviour
         lineRenderer.startColor = lineRenderer.endColor = Color.red;
     }
 
-    void Update(){
+    void Update()
+    {
         float spriteAngle = Mathf.Atan2(startingDirection.y, startingDirection.x) * Mathf.Rad2Deg;
-        bulletSprite.transform.rotation = Quaternion.Euler(0,0,spriteAngle);
-        if(controllingBullet == true){
+        bulletSprite.transform.rotation = Quaternion.Euler(0, 0, spriteAngle);
+        if (controllingBullet == true)
+        {
             Vector3 tempDir = HandleAiming(currentDirection);
 
             Vector3 startPos = transform.position;
@@ -59,10 +62,14 @@ public class BulletManager : MonoBehaviour
 
             lineRenderer.SetPosition(0, startPos);
             lineRenderer.SetPosition(1, endPos);
-            if(Input.GetKeyDown(KeyCode.Space)){
-                if(numberOfRicochets > 0){
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (numberOfRicochets > 0)
+                {
                     audioSource.PlayOneShot(ricochetSound);
-                }else{
+                }
+                else
+                {
                     audioSource.PlayOneShot(gunshotSound);
                 }
                 FireHitscanBullet(tempDir);
@@ -88,17 +95,20 @@ public class BulletManager : MonoBehaviour
         //sorting hits by distance
         RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxDistance, collisionLayers);
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
-        
 
-        foreach(RaycastHit hit in hits){
+
+        foreach (RaycastHit hit in hits)
+        {
             string collisionMask = LayerMask.LayerToName(hit.collider.gameObject.layer);
-            Debug.Log($"collisionMask: {collisionMask}");
-            if (collisionMask == enemyMask){
-                Debug.Log("+PIERCED");
+
+            if (collisionMask == enemyMask)
+            {
+
                 HandleEnemyCollision(hit);
                 continue;
             }
-            else if (collisionMask == obstacleMask){
+            else if (collisionMask == obstacleMask)
+            {
                 hitPoint = hit.point; // Bullet stops here
                 HandleCollision(hit);
                 break; // Stop checking further hits
@@ -106,34 +116,39 @@ public class BulletManager : MonoBehaviour
         }
         // Move the bullet visually to the hit point
         float travelTime = Vector3.Distance(origin, hitPoint) / bulletSpeed;
-        transform.DOMove(hitPoint, travelTime).SetEase(Ease.Linear).OnComplete(() =>{transform.position = hitPoint;});
+        transform.DOMove(hitPoint, travelTime).SetEase(Ease.Linear).OnComplete(() => { transform.position = hitPoint; });
     }
 
-    void HandleCollision(RaycastHit hit){
-        
+    void HandleCollision(RaycastHit hit)
+    {
+
         Vector3 hitNormal = hit.normal;
-        Debug.Log($"current DIRECTION: {currentDirection}");
+
         currentDirection = hitNormal.normalized; // Reflect direction
-        Debug.Log($"new DIRECTION: {currentDirection}");
+
         StartCoroutine(EnableAimingAfterHit());
     }
 
-    void HandleEnemyCollision(RaycastHit hit){
+    void HandleEnemyCollision(RaycastHit hit)
+    {
         StartCoroutine(DestroyEnemyAfterBulletHit(hit.collider.gameObject));
     }
 
-    private IEnumerator DestroyEnemyAfterBulletHit(GameObject enemy){
+    private IEnumerator DestroyEnemyAfterBulletHit(GameObject enemy)
+    {
         yield return new WaitForSeconds(Vector3.Distance(transform.position, hitPoint) / bulletSpeed);
         audioSource.PlayOneShot(hitEnemySound);
         Enemy enScript = enemy.GetComponent<Enemy>();
-        if(enScript != null){
+        if (enScript != null)
+        {
             enScript.SwitchState(EnemyState.Dead);
         }
     }
 
-    private IEnumerator EnableAimingAfterHit(){
+    private IEnumerator EnableAimingAfterHit()
+    {
         yield return new WaitForSeconds(Vector3.Distance(transform.position, hitPoint) / bulletSpeed);
-        Debug.Log("Hit a wall, the direction has been reflected");
+
         numberOfRicochets++;
         audioSource.PlayOneShot(hitWallSound);
         controllingBullet = true;

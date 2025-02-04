@@ -58,7 +58,7 @@ public class Enemy : GridObject
 
     private void DeadState()
     {
-        Debug.Log("dead");
+
         //Change sprite to x
         //spawn bloodsplatter
         OnEnemyDead?.Invoke(1);
@@ -116,6 +116,8 @@ public class Enemy : GridObject
     {
         SwitchState(EnemyState.Idle);
     }
+
+
 
     private void OnDestroy()
     {

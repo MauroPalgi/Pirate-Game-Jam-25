@@ -12,13 +12,13 @@ public class ObstacleSpawner : Spawner
     {
         if (grid == null)
         {
-            Debug.LogError("Grid is not assigned in the ObstacleSpawner!");
+
             return;
         }
 
         if (items == null)
         {
-            Debug.LogError("Obstacle prefab is not assigned in the ObstacleSpawner!");
+
             return;
         }
 
@@ -26,12 +26,11 @@ public class ObstacleSpawner : Spawner
 
         for (int i = 0; i < amount; i++)
         {
-
             bool positionAdded = false;
             Vector3 randomPosition = new Vector3();
             while (!positionAdded)
             {
-                randomPosition = grid.GetRandomGridWorldPosition() + new Vector3(0,2,0);
+                randomPosition = grid.GetRandomGridWorldPosition() + new Vector3(0, 2, 0);
                 if (!usedPositions.Contains(randomPosition))
                 {
                     usedPositions.Add(randomPosition);
@@ -39,9 +38,7 @@ public class ObstacleSpawner : Spawner
                 }
             }
 
-
             int rondomItmesIndex = UnityEngine.Random.Range(0, items.Count);
-
 
             GameObject obstacleParent = GameObject.Find("Obstacle");
             if (obstacleParent == null)
@@ -49,7 +46,11 @@ public class ObstacleSpawner : Spawner
                 obstacleParent = new GameObject("Obstacle"); // Si no existe, lo creamos
             }
 
-            GameObject instance = Instantiate(items[rondomItmesIndex], randomPosition, Quaternion.identity);
+            GameObject instance = Instantiate(
+                items[rondomItmesIndex],
+                randomPosition,
+                Quaternion.identity
+            );
             // Asigna la capa al objeto instanciado
             LayerMask obstacleMask = grid.GetObstacleLayer();
             int layerIndex = LayerMask.NameToLayer("Wall");
@@ -74,7 +75,6 @@ public class ObstacleSpawner : Spawner
         }
     }
 
-
     public void DestroyAllObstacle()
     {
         GameObject enemiesParent = GameObject.Find("Obstacle");
@@ -82,23 +82,20 @@ public class ObstacleSpawner : Spawner
         if (enemiesParent != null)
         {
             Destroy(enemiesParent);
-            Debug.Log("Todos los enemigos han sido eliminados.");
+
         }
         else
         {
-            Debug.Log("No hay enemigos para eliminar.");
+
         }
     }
 
-
     protected override void StateChangeEventHandler(GameState state)
     {
-        if(state == GameState.RestartSpawners){
+        if (state == GameState.RestartSpawners || state == GameState.SpawningObstacle)
+        {
             DestroyAllObstacle();
             SpawnObstacleRandomGridPosition();
-        }else{
-            SpawnObstacleRandomGridPosition();
         }
-
     }
 }

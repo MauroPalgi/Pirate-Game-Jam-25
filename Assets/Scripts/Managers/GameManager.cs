@@ -6,7 +6,17 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     // Start is called before the first frame update
-    public GameState State { get; private set; }
+    [SerializeField]
+    public GameState State = GameState.Starting;
+    public TacticGrid Grid;
+
+    /*
+        public LevelManager levelManager;
+        public MenuManager menuManager;
+        public EnemySpawner enemySpawner;
+        public ObstacleSpawner obstacleSpawner;
+        public GameObject Player;
+        */
     public static event Action<GameState> OnGameStateChanged;
 
     public void ChangeState(GameState newState)
@@ -15,9 +25,10 @@ public class GameManager : Singleton<GameManager>
         switch (newState)
         {
             case GameState.Starting:
-                StartingState();
+                HandleStarting();
                 break;
-            case GameState.SpawningGrid:
+            case GameState.SpawningLevel:
+                HandleSpawningLevel();
                 break;
             case GameState.SpawningPlayer:
                 break;
@@ -33,19 +44,39 @@ public class GameManager : Singleton<GameManager>
         OnGameStateChanged?.Invoke(newState);
     }
 
-    void StartingState(){
+    private void HandleSpawningLevel()
+    {
+        Debug.Log("HandleSpawningLevel");
+    }
+
+    void HandleStarting()
+    {
+        Debug.Log("HandleSpawningLevel");
+
+        /*
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject bulletSpawn = GameObject.FindGameObjectWithTag("bulletSpawn");
         GameObject bullet = GameObject.FindGameObjectWithTag("Bullet");
-        player.transform.position = new Vector3(UnityEngine.Random.Range(5,66),2.6f,2f);
-        bullet.transform.position = bulletSpawn.transform.position;
+        player.transform.position = new Vector3(UnityEngine.Random.Range(5, 66), 2.6f, 2f);
+        bullet.transform.position = bulletSpawn.transform.position;*/
     }
 
+    private IEnumerator WaitThenSwitchState(GameState newState, float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        SwitchState(newState);
+    }
+
+    public void SwitchState(GameState newState)
+    {
+        State = newState;
+    }
 }
 
 public enum GameState
 {
     Starting,
+    SpawningLevel,
     SpawningGrid,
     SpawningPlayer,
     SpawningEnemies,
