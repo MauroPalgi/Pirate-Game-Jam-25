@@ -16,6 +16,11 @@ public class EnemySpawner : Spawner
 
     public int enemyAmount = 0;
 
+    public int GetEnemyAmount()
+    {
+        return amount;
+    }
+
     private void Update()
     {
         if (enemiesObject != null)

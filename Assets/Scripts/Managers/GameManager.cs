@@ -41,17 +41,18 @@ public class GameManager : Singleton<GameManager>
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
+        Debug.Log("here");
         OnGameStateChanged?.Invoke(newState);
     }
 
     private void HandleSpawningLevel()
     {
-        Debug.Log("HandleSpawningLevel");
+        // Debug.Log("HandleSpawningLevel");
     }
 
     void HandleStarting()
     {
-        Debug.Log("HandleSpawningLevel");
+        // Debug.Log("HandleSpawningLevel");
 
         /*
         GameObject player = GameObject.FindGameObjectWithTag("Player");

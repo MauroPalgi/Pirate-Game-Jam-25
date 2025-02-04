@@ -12,9 +12,9 @@ public class MenuManager : MonoBehaviour
     //scale this up to 150 in 0.3f, then hide it
     public GameObject UIMainMenu;
     public GameObject UIGame;
-    public Camera mainCam;
-    public GameManager gameManager;
 
+    private HUDController hUDController;
+    public Camera mainCam;
     float scalingUp = 150f;
     float scalingDown = 3f;
 
@@ -25,8 +25,9 @@ public class MenuManager : MonoBehaviour
 
     private void Awake()
     {
-        UIMainMenu.gameObject.SetActive(false);
+        UIMainMenu.gameObject.SetActive(true);
         UIGame.gameObject.SetActive(false);
+        hUDController = UIGame.GetComponent<HUDController>();
     }
 
     void Update()
@@ -53,8 +54,9 @@ public class MenuManager : MonoBehaviour
                 .transform.DOScale(new Vector3(scalingUp, scalingUp, scalingUp), 0.3f)
                 .OnComplete(() => UIMainMenu.gameObject.SetActive(false));
             UIGame.gameObject.SetActive(true);
-            gameManager.SwitchState(GameState.SpawningLevel);
             MainMenuUp = !MainMenuUp;
+            GameManager.Instance.ChangeState(GameState.SpawningLevel);
+
         }
         else
         {
@@ -68,30 +70,42 @@ public class MenuManager : MonoBehaviour
                 new Vector3(mainCam.transform.position.x, upwardsPos, mainCam.transform.position.z),
                 0.3f
             );
+
             UIMainMenu.gameObject.SetActive(true);
             UIGame.gameObject.SetActive(false);
-
             UIMainMenu.transform.DOScale(new Vector3(scalingDown, scalingDown, scalingDown), 0.3f);
-
             MainMenuUp = !MainMenuUp;
         }
     }
 
     private void HandleOnGameStateChanged(GameState state)
     {
-        if (state == GameState.Starting)
-        {
-            HandleStartingState();
-        }
-    }
-
-    private void HandleStartingState()
-    {
-        UIMainMenu.gameObject.SetActive(true);
+        Debug.Log(state.ToString());
     }
 
     private void OnDestroy()
     {
         GameManager.OnGameStateChanged -= HandleOnGameStateChanged;
+    }
+
+    public void OnClickPlay()
+    {
+        ToggleMainMenu();
+    }
+
+    public void UpdateScore(int score)
+    {
+        if (hUDController != null)
+        {
+            hUDController.UpdateScore(score);
+        }
+    }
+
+    internal void UpdateEnemies(int amount)
+    {
+        if (hUDController != null)
+        {
+            hUDController.UpdateEnemies(amount);
+        }
     }
 }

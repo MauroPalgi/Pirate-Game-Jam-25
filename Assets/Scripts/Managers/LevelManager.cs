@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
     public GameManager gameManager;
     public MenuManager menuManager;
 
     public EnemySpawner enemySpawner;
     public ObstacleSpawner obstacleSpawner;
-    private HUDController hUDController;
+    private HUDController hudController;
     public int currentLevel = 0;
     public int enemiesKilled = 0;
     private int enemyAmount;
@@ -27,7 +27,6 @@ public class LevelManager : MonoBehaviour
 
     void ChangeLevel()
     {
-        GameManager.Instance.ChangeState(GameState.RestartSpawners);
         bgMaterial.mainTexture = textures[Random.Range(0, textures.Count)];
         backgroundGame
             .transform.DOMove(
@@ -52,27 +51,30 @@ public class LevelManager : MonoBehaviour
     {
         Enemy.OnEnemyDead += HandleEnemyDying;
         EnemySpawner.OnEnemySpawnerStart += HandleEnemyAmount;
-        hUDController = menuManager.GetComponent<HUDController>();
+        GameManager.OnGameStateChanged += HandleOnGameStateChanged;
     }
 
     private void OnDestroy()
     {
         Enemy.OnEnemyDead -= HandleEnemyDying;
         EnemySpawner.OnEnemySpawnerStart -= HandleEnemyAmount;
+        GameManager.OnGameStateChanged -= HandleOnGameStateChanged;
     }
 
     private void HandleEnemyDying(int i)
     {
-        enemiesKilled = enemiesKilled + i;
-        if (enemiesKilled >= enemyAmount)
-        {
-            currentLevel++;
-            ChangeLevel();
-        }
+        menuManager.UpdateScore(99);
     }
 
-    private void HandleEnemyAmount(int i)
+    private void HandleEnemyAmount(int i) { }
+
+    private void HandleOnGameStateChanged(GameState state)
     {
-        enemyAmount = i;
+        Debug.Log(state);
+        if (state == GameState.SpawningLevel)
+        {
+            menuManager.UpdateScore(99);
+            menuManager.UpdateEnemies(99);
+        }
     }
 }
