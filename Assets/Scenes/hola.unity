@@ -3688,9 +3688,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - {fileID: 4619394030231765602, guid: 4d837605fb9ced24687be8260390f4ac, type: 3}
-  gameManager: {fileID: 0}
+  - {fileID: 4619394030231765602, guid: 32f9c24a705a3f44e9e917ab30204997, type: 3}
+  gameManager: {fileID: 900170432729538793}
   amount: 10
-  stateTrigger: 4
+  stateTrigger: 5
   grid: {fileID: 2443265862565947355}
 --- !u!137 &7299041619728716647
 SkinnedMeshRenderer:
@@ -3766,9 +3767,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - {fileID: 5410862024415379451, guid: c6d9a3789b481054394757dce3a1b9f8, type: 3}
-  gameManager: {fileID: 0}
-  amount: 1
-  stateTrigger: 3
+  gameManager: {fileID: 900170432729538793}
+  amount: 10
+  stateTrigger: 4
   grid: {fileID: 2443265862565947355}
   enemiesObject: []
   enemyAmount: 0

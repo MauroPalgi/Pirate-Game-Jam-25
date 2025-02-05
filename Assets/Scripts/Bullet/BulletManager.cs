@@ -44,7 +44,7 @@ public class BulletManager : MonoBehaviour
 
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
-        lineRenderer.startWidth = lineRenderer.endWidth = 0.05f;
+        lineRenderer.startWidth = lineRenderer.endWidth = 0.5f;
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = lineRenderer.endColor = Color.red;
     }
@@ -58,7 +58,7 @@ public class BulletManager : MonoBehaviour
             Vector3 tempDir = HandleAiming(currentDirection);
 
             Vector3 startPos = transform.position;
-            Vector3 endPos = startPos + tempDir * 5f;
+            Vector3 endPos = startPos + tempDir * 10f;
 
             lineRenderer.SetPosition(0, startPos);
             lineRenderer.SetPosition(1, endPos);

@@ -70,11 +70,11 @@ public class LevelManager : Singleton<LevelManager>
 
     private void HandleOnGameStateChanged(GameState state)
     {
-        Debug.Log(state);
         if (state == GameState.SpawningLevel)
         {
             menuManager.UpdateScore(99);
-            menuManager.UpdateEnemies(99);
+            Debug.Log("enemies " + enemySpawner.GetEnemyAmount());
+            menuManager.UpdateEnemies(enemySpawner.GetEnemyAmount());
         }
     }
 }

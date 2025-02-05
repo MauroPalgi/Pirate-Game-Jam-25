@@ -25,42 +25,23 @@ public class GameManager : Singleton<GameManager>
         switch (newState)
         {
             case GameState.Starting:
-                HandleStarting();
                 break;
             case GameState.SpawningLevel:
-                HandleSpawningLevel();
-                break;
-            case GameState.SpawningPlayer:
                 break;
             case GameState.SpawningEnemies:
                 break;
-            case GameState.SpawningObstacle:
+            case GameState.SpawningObstacles:
                 break;
             case GameState.RestartSpawners:
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
-        Debug.Log("here");
         OnGameStateChanged?.Invoke(newState);
     }
 
-    private void HandleSpawningLevel()
-    {
-        // Debug.Log("HandleSpawningLevel");
-    }
 
-    void HandleStarting()
-    {
-        // Debug.Log("HandleSpawningLevel");
 
-        /*
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        GameObject bulletSpawn = GameObject.FindGameObjectWithTag("bulletSpawn");
-        GameObject bullet = GameObject.FindGameObjectWithTag("Bullet");
-        player.transform.position = new Vector3(UnityEngine.Random.Range(5, 66), 2.6f, 2f);
-        bullet.transform.position = bulletSpawn.transform.position;*/
-    }
 
     private IEnumerator WaitThenSwitchState(GameState newState, float waitTime)
     {
@@ -77,10 +58,8 @@ public class GameManager : Singleton<GameManager>
 public enum GameState
 {
     Starting,
-    SpawningLevel,
-    SpawningGrid,
-    SpawningPlayer,
-    SpawningEnemies,
-    SpawningObstacle,
+    SpawningLevel,  
+    SpawningEnemies,  
+    SpawningObstacles,  
     RestartSpawners,
 }

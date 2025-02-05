@@ -37,22 +37,17 @@ public class HUDController : MonoBehaviour
         {
             scoreText.text = score.ToString();
         }
-        else
-        {
-            Debug.LogError("⚠️ scoreText es null, verifica que el objeto existe en el Canvas.");
-        }
+        
     }
 
     public void UpdateEnemies(int amount)
     {
+        Debug.Log(amount);
         if (enemyText != null)
         {
             enemyText.text = amount.ToString();
         }
-        else
-        {
-            Debug.LogError("⚠️ enemyText es null, verifica que el objeto existe en el Canvas.");
-        }
+        
     }
 }
 

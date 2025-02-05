@@ -92,7 +92,7 @@ public class ObstacleSpawner : Spawner
 
     protected override void StateChangeEventHandler(GameState state)
     {
-        if (state == GameState.RestartSpawners || state == GameState.SpawningObstacle)
+        if (state == GameState.RestartSpawners || state == GameState.SpawningObstacles)
         {
             DestroyAllObstacle();
             SpawnObstacleRandomGridPosition();

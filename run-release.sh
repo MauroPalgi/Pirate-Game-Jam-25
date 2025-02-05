@@ -3,10 +3,14 @@
 echo "🔄 Iniciando build de Unity antes del commit..."
 
 # Ruta donde está instalada Unity en tu sistema (Usar "/" en rutas de Windows para Bash)
-UNITY_PATH="C:/Program Files/Unity/Hub/Editor/2022.3.39f1/Editor/Unity.exe"
+# UNITY_PATH="C:/Program Files/Unity/Hub/Editor/2022.3.39f1/Editor/Unity.exe"
+UNITY_PATH="H:/Program Files/Unity/2022.3.39f1/Editor/Unity.exe"
+
 
 # Ruta del proyecto de Unity
-PROJECT_PATH="C:/mauro/repos/Pirate-Game-Jam-25"
+# PROJECT_PATH="C:/mauro/repos/Pirate-Game-Jam-25"
+PROJECT_PATH="H:/Mauro/repositorios/Pirate-Game-Jam-25"
+
 
 # Carpeta donde se generará el build
 BUILD_PATH="$PROJECT_PATH/release"
